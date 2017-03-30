@@ -10,6 +10,15 @@
         light. It doesn't matter which cable you use, as long as it's in the 
         back row."
 
+    <-> [connectWrongPerson exists]
+        text: Whoops! You want to connect to Mabel instead of {connectWrongPerson}
+    
+    <-> [connectWrongCable]
+        text: Whoops! You want to use one of the cables in the row farthest away from you.
+
+    <-> [toggleWrongSwitch]
+        text: Whoops! You don't want to touch the switches yet.
+
     -> first_switch: [Mabel.cable exists and Mable.isFront is false]
 
 # first_switch
@@ -68,22 +77,6 @@
 # start_game
     text: "It seems like you've've got it! 
         Things will pick up rather quickly, so do try to keep up"
-
-## connect_to_not_mabel
-    [graph.currentNodeId is start and connectWrongPerson exists]
-    allows_repeats
-    text: Whoops! You want to connect to Mabel instead of {connectWrongPerson}
-
-## use_wrong_cable_row
-    [graph.currentNodeId is start and connectWrongCable is true]
-    allows_repeats
-    text: "Whoops! You want to use one of the cables in the row farthest 
-        away from you."
-
-## dont_use_switches
-    [graph.currentNodeId is start and toggleWrongSwitch is true]
-    allows_repeats
-    text: Whoops! You don't want to touch the switches yet.
 
 ## use_wrong_switch_row
     [graph.currentNodeId is first_switch and toggleWrongSwitchInPair is true]
