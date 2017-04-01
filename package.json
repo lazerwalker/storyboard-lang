@@ -1,0 +1,23 @@
+{
+  "name": "storyboard-parser",
+  "version": "0.0.1",
+  "description": "",
+  "main": "grammar.js",
+  "dependencies": {
+    "ohm-js": "^0.13.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lazerwalker/storyboard-lang.git"
+  },
+  "author": "michael@lazerwalker.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lazerwalker/storyboard-lang/issues"
+  },
+  "homepage": "https://github.com/lazerwalker/storyboard-lang#readme"
+}
