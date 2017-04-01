@@ -125,7 +125,7 @@
 ## wrong_switch_col_wrong
     [graph.currentNodeId is ring_dolores and toggleWrongSwitch]
     allows_repeats
-    text: "Use the switch that's in the same row as the cables you're using.
+    text: "Use the switch that's in the same row as the cables you're using."
 
 ## disconnect_early
     [graph.currentNodeId is dolores_blinking and Mable.cable does_not_exist]
