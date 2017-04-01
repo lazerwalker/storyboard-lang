@@ -1,0 +1,107 @@
+Story {
+
+Graph
+  = Node+
+
+Node
+  = Title Predicate Passage+ Choice* -- bag
+  | Title Passage+ Choice* -- graph
+  
+Title
+  = "##" ident "##" -- endBag
+  | "##" ident -- noEndBag
+  | "#" ident "#" -- end
+  | "#" ident -- noEnd
+   
+Predicate
+  = "[" PredicateExp "]"
+  
+PredicateExp
+  = 
+  | PredicateExp logicOperator PredicateExp -- chain
+  | ifOperator BooleanExp -- explicit
+  | "(" PredicateExp ")" -- parens  
+  | BooleanExp -- implicit  
+
+  
+BooleanExp
+   = ident existenceOperator -- exists
+   | ident comparator ident -- comparison
+   | ident -- truthy
+  
+// TODO: Rename passage
+Passage
+  = Predicate content+ -- predicate
+  | specialInstruction -- instruction
+  | Comment
+  | content+ -- noPredicate
+  
+Choice
+  = Choice content* -- inlineBagNode
+  | choiceOperator ident ": " Predicate -- named
+  | choiceOperator Predicate --unnamed
+
+// TODO: These aren't handled properly
+// (should be embeddable ANYWHERE.
+// Right now, they have to be their own line, and can only be used as a "Passage"
+Comment
+  = "--" sentence
+ 
+content
+  = ident ": " sentence
+
+// Primitives
+// TODO: steal judiciously from the ES5 example
+  
+ident  (an identifier)
+  = symbol*
+  
+sentence
+  = "\"" doubleQuoteSymbol* "\"" -- quote
+  | unquotedTextSymbol* -- noQuote
+  
+doubleQuoteSymbol
+  = unquotedTextSymbol | "\n"
+
+unquotedTextSymbol
+  = symbol | " "
+
+symbol 
+  = alnum | "_" | "." | "!" | "," | "'" | "{" | "}" | "?" | "-"
+
+   
+comparator
+  = "=="
+  | "!="
+  | "="
+  | "<="
+  | ">="
+  | ">"
+  | "<"
+  | "is"
+  | "isnt"  
+
+existenceOperator
+  = "exists"
+  | "doesnt exist"
+ 
+ifOperator
+  = "if"
+  | "unless"
+  | "not"
+  | "if not"
+  
+logicOperator
+  = "&&"
+  | "||"
+  | "and"
+  | "or"
+
+choiceOperator
+  = "<->"
+  | "->"
+  
+specialInstruction
+  = "allows_repeats"
+  
+}
