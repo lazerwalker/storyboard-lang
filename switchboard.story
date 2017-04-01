@@ -72,7 +72,7 @@
 
 # disconnect
     text: "They've finished their call, so you can disconnect their cables now"
-    -> start_game: [Mabel.cable does_not_exist and Dolores.cable does_not_exist]
+    -> start_game: [Mabel.cable doesnt exist and Dolores.cable doesnt exist]
 
 # start_game
     text: "It seems like you've've got it! 
@@ -95,9 +95,9 @@
     text: Flip the switch the other way, so it's going away from you.
 
 ## shouldnt_need_switches
-    -- We should be able to combine this with dont_use_switches?
     [graph.currentNodeId is connect_to_dolores and 
         toggleWrongSwitch is true]
+    -- We should be able to combine this with dont_use_switches?
     allows_repeats
     text: You shouldn't need to touch any switches!
 
@@ -128,7 +128,7 @@
     text: "Use the switch that's in the same row as the cables you're using."
 
 ## disconnect_early
-    [graph.currentNodeId is dolores_blinking and Mable.cable does_not_exist]
+    [graph.currentNodeId is dolores_blinking and Mable.cable doesnt exist]
     allows_repeats
     text: "You shouldn't disconnect them until they're done talking. Their 
         lights will turn off when they're done."

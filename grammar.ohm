@@ -31,9 +31,9 @@ BooleanExp
   
 // TODO: Rename passage
 Passage
-  = Predicate content+ -- predicate
+  = Comment
   | specialInstruction -- instruction
-  | Comment
+  | Predicate content+ -- predicate
   | content+ -- noPredicate
   
 Choice
@@ -102,6 +102,6 @@ choiceOperator
   | "->"
   
 specialInstruction
-  = "allows_repeats"
+  = "allows_repeats" | "dead_end"
   
 }

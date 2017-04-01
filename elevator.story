@@ -12,7 +12,7 @@
             I'll wait for you."
     
     [unless headphones]
-        speech:  "I need you to put on headphones, and then put your {device} 
+        speech: "I need you to put on headphones, and then put your {device} 
             in your pocket or handbag. Don't worry, I'll wait for you."
     
     -> [headphones and proximity]
