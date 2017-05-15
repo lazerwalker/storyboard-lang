@@ -1,5 +1,7 @@
 Story {
 
+Story = Graph
+
 Graph
   = Node+
 

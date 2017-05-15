@@ -1,0 +1,8 @@
+Should graph nodes be allowed to have a top-level predicate? Does that even make sense?
+
+
+---
+* "wait until" syntax
+* Inline bag nodes: a good idea at all?
+* Inline bag nodes: how to specify "run this once" vs "run indefinitely"
+* How to describe parallel node graphs? Something that needs runtime work?
