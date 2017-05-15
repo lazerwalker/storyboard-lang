@@ -22,9 +22,9 @@ semantics.addAttribute('asRuntimeJSON', {
     Node_bag: (title, predicate, passages, choices) => {
         return {
             nodeId: title.asRuntimeJSON,
-            passages: passages.map( (p) => p.asRuntimeJSON ),
+            passages: passages.children.map( (p) => p.asRuntimeJSON ),
             predicate: predicate.asRuntimeJSON,
-            choices: choices.map( (c) => c.asRuntimeJSON )
+            choices: choices.children.map( (c) => c.asRuntimeJSON )
         }
     },
 
@@ -32,13 +32,14 @@ semantics.addAttribute('asRuntimeJSON', {
         // TODO: generate node ID, or can we just use titles?
         return {
             nodeId: title.asRuntimeJSON,
-            passages: passages.map( (p) => p.asRuntimeJSON ),
-            choices: choices.map( (c) => c.asRuntimeJSON )
+            passages: passages.children.map( (p) => p.asRuntimeJSON ),
+            choices: choices.children.map( (c) => c.asRuntimeJSON )
         }
     },
 
     Predicate: (lparen, expressions, rparen) => {
-        return expressions.map( (e) => e.asRuntimeJSON )
+        // TODO: I don't believe the current JSON structure is expressive enough to handle "or", which the syntax does
+        return 
     },
 
     PredicateExp_chain: (exp1, logicOperator, exp2) => {
@@ -51,7 +52,7 @@ semantics.addAttribute('asRuntimeJSON', {
 
     // TODO: This shouldn't exist.
     PredicateExp_parens: (lparen, exp, rparen) => {
-        
+        return exp.asRuntimeJSON
     },
 
     PredicateExp_implicit: (exp) => {
@@ -95,44 +96,67 @@ semantics.addAttribute('asRuntimeJSON', {
         return result
     },
 
-    Passage_instruction: (comment, instruction) => {
-
+    // TODO: These special instructions (e.g. allows_repeat) need to be shoved on the higher-level JSON object rather than the passage array
+    Passage_instruction: (instruction) => {
+        let result = {}
+        result[instruction.sourceString] = true
+        return result
     },
 
     Passage_predicate: (predicate, content) => {
-        
+        // TODO: Assign passage ID
+        let result = content.asRuntimeJSON
+        result.passageId = "id"
+        result.predicate = predicate.asRuntimeJSON
+        return result
     },
 
     Passage_noPredicate: (content) => {
-
+        let result = content.asRuntimeJSON
+        result.passageId = "id"
+        return result
     },
 
     Choice_inlineBagNode: (choice, content) => {
-
+        // TODO: This needs to be thought about.
+        // Does the runtime schema get modified to allow nested nodes, or do these get transformed into normal bag nodes at compile time?
+        let result = choice.asRuntimeJSON
+        result.content = content.asRuntimeJSON
+        return result
     },
 
     Choice_named: (operator, ident, _, predicate) => {
-
+        return {
+            nodeId: ident.sourceString,
+            predicate: predicate.asRuntimeJSON
+        }
     },
 
     Choice_unnamed: (operator, predicate) => {
-
+        // TODO: How do we fetch the "next" nodeId?
+        // Maybe the runtime engine simply goes to the next one if there's no nodeId present?
+        return {
+            predicate: predicate.asRuntimeJSON
+        }
     },
 
-    Comment: (_1, _2) =>  undefined,
+    content: (ident, _, content) => {
+        return {
+            type: ident.sourceString,
+            content: content.asRuntimeJSON
+        }
+    },
+
+    sentence_noQuote: (content) => content.sourceString,
+    sentence_quote: (lquote, content, rquote) =>  content.sourceString,
+
+    Comment: (_1, _2) => undefined,
 
     Title_noEnd: (_, title) => title.sourceString,            
     Title_noEndBag: (_, title) => title.sourceString,
     Title_end: (_1, title, _2) => title.sourceString,
-    Title_endBag: (_1, title, _2) => title.sourceString,
-
-     _nonterminal:  function(children) {
-        if (children.length === 1) {
-            return children[0].asRuntimeJSON;
-        } else {
-            throw new Error("Uh oh!" + children)
-        }
-    }
+    Title_endBag: (_1, title, _2) => title.sourceString
 })
 
-console.log(result.asRuntimeJSON)
+// const _ = result.asRuntimeJSON
+console.log(JSON.stringify(result.asRuntimeJSON, undefined, 2))
