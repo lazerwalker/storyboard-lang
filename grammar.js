@@ -148,7 +148,12 @@ semantics.addAttribute('asRuntimeJSON', {
     },
 
     sentence_noQuote: (content) => content.sourceString,
-    sentence_quote: (lquote, content, rquote) =>  content.sourceString,
+    sentence_quote: (lquote, content, rquote) => {
+        let result = content.sourceString
+        result = result.replace("\n", "")
+        result = result.replace(/\s+/g, " ")
+        return result
+    },
 
     Comment: (_1, _2) => undefined,
 
