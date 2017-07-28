@@ -35,24 +35,24 @@ const asRuntimeJSON = {
 
     Predicate: (lparen, expressions, rparen) => {
         // TODO: I don't believe the current JSON structure is expressive enough to handle "or", which the syntax does
-        return 
+        return expressions.sourceString
     },
 
     PredicateExp_chain: (exp1, logicOperator, exp2) => {
-        
+        return this.sourceString
     },
 
     PredicateExp_explicit: (ifOperator, boolean) => {
-        
+        return this.sourceString
     },
 
     // TODO: This shouldn't exist.
     PredicateExp_parens: (lparen, exp, rparen) => {
-        return exp.asRuntimeJSON
+        return exp.sourceString
     },
 
     PredicateExp_implicit: (exp) => {
-        return exp.asRuntimeJSON
+        return exp.sourceString
     },
 
     BooleanExp_exists: (identifier, operator) => {
