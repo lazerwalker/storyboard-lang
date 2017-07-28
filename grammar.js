@@ -3,13 +3,9 @@ const ohm = require('ohm-js')
 const grammarText = fs.readFileSync('grammar.ohm')
 const grammar = ohm.grammar(grammarText)
 
-const elevatorText = fs.readFileSync('switchboard.story')
+const elevatorText = fs.readFileSync('elevator.story')
 
-const semantics = grammar.createSemantics()
-const match = grammar.match(elevatorText)
-const result = semantics(match)
-
-semantics.addAttribute('asRuntimeJSON', {
+const asRuntimeJSON = {
     Story: (graph) => {
         return graph.asRuntimeJSON
     },
@@ -161,7 +157,16 @@ semantics.addAttribute('asRuntimeJSON', {
     Title_noEndBag: (_, title) => title.sourceString,
     Title_end: (_1, title, _2) => title.sourceString,
     Title_endBag: (_1, title, _2) => title.sourceString
-})
+}
 
-// const _ = result.asRuntimeJSON
-console.log(JSON.stringify(result.asRuntimeJSON, undefined, 2))
+function parseString(text) {
+    const semantics = grammar.createSemantics()
+    const match = grammar.match(text)
+    const result = semantics(match)
+
+    semantics.addAttribute('asRuntimeJSON', asRuntimeJSON)
+
+    return result.asRuntimeJSON;
+}
+
+exports.parseString = parseString
