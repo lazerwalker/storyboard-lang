@@ -5,7 +5,8 @@
   "main": "grammar.js",
   "dependencies": {
     "chai": "^4.1.0",
-    "ohm-js": "^0.13.1"
+    "ohm-js": "^0.13.1",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "mocha": "^3.4.2"
