@@ -1,5 +1,7 @@
 const fs = require('fs')
 const ohm = require('ohm-js')
+const _ = require('underscore')
+
 const grammarText = fs.readFileSync('grammar.ohm')
 const grammar = ohm.grammar(grammarText)
 
@@ -7,12 +9,11 @@ const elevatorText = fs.readFileSync('elevator.story')
 
 const asRuntimeJSON = {
     Story: (graph) => {
-        return graph.asRuntimeJSON
-    },
-
-    Graph: (nodes) => {
-        return nodes.children
+        return _(graph.children).chain()
             .map((n) => n.asRuntimeJSON)
+            .groupBy((n) => n.predicate ? "bag" : "graph")
+            .mapObject((val, key) => _.indexBy(val, 'nodeId'))
+            .value()
     },
 
     Node_bag: (title, predicate, passages, choices) => {

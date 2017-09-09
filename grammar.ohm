@@ -1,9 +1,6 @@
 Story {
 
-Story = Graph
-
-Graph
-  = Node+
+Story = Node+
 
 Node
   = Title Predicate Passage+ Choice* -- bag
