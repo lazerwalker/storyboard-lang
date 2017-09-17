@@ -39,8 +39,7 @@ const asRuntimeJSON = {
     },
 
     Node_graph: (title, predicate, passages, choices) => {
-        // TODO: if predicate doesn't exist?
-        // TODO: generate node ID, or can we just use titles?
+        // TODO: what if predicate doesn't exist?
         return {
             nodeId: title.asRuntimeJSON,
             passages: passages.children.map( (p) => p.asRuntimeJSON ),
@@ -98,17 +97,14 @@ const asRuntimeJSON = {
         if (comparator === "=" || comparator === "==" || comparator === "is") {
             result[first] = { "eq": second }
         } else if (comparator === "!=" || comparator === "isnt") {
-            // TODO
             result[first] = { "neq": second }
         } else if (comparator === "<=") {
             result[first] = { "lte": second };
         } else if (comparator === ">=") {
             result[first] = { "gte": second };
         } else if (comparator === "<") {
-            //TODO
             result[first] = { "lt": second };
         } else if (comparator === ">") {
-            // TODO
             result[first] = { "gt": second };
         } else {
             throw new Error("Found unexpected comparator")
