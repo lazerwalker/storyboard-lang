@@ -8,79 +8,108 @@ const grammar = ohm.grammar(grammarText)
 const elevatorText = fs.readFileSync('elevator.story')
 
 const asRuntimeJSON = {
-    Story: (graph) => {
-        return _(graph.children).chain()
+    Story: (predicate) => {
+        // TODO: Would be nice if we could remove 'isBag',
+        // whether removing it from use entirely or just stripping it from output
+        let result = _(nodes.children).chain()
             .map((n) => n.asRuntimeJSON)
-            .groupBy((n) => n.predicate ? "bag" : "graph")
+            .groupBy((n) => n.isBag ? "bag" : "graph")
             .mapObject((val, key) => _.indexBy(val, 'nodeId'))
             .value()
+
+        if (result.graph) {
+            result.graph = {
+                start: start.asRuntimeJSON,
+                nodes: result.graph
+            }
+        }
+        return result
     },
+
+    Start: (_, nodeId) => nodeId.sourceString,
 
     Node_bag: (title, predicate, passages, choices) => {
         return {
             nodeId: title.asRuntimeJSON,
             passages: passages.children.map( (p) => p.asRuntimeJSON ),
             predicate: predicate.asRuntimeJSON,
-            choices: choices.children.map( (c) => c.asRuntimeJSON )
+            choices: choices.children.map( (c) => c.asRuntimeJSON ),
+            isBag: true
         }
     },
 
-    Node_graph: (title, passages, choices) => {
+    Node_graph: (title, predicate, passages, choices) => {
+        // TODO: if predicate doesn't exist?
         // TODO: generate node ID, or can we just use titles?
         return {
             nodeId: title.asRuntimeJSON,
             passages: passages.children.map( (p) => p.asRuntimeJSON ),
-            choices: choices.children.map( (c) => c.asRuntimeJSON )
+            predicate: predicate.asRuntimeJSON,
+            choices: choices.children.map( (c) => c.asRuntimeJSON ),
+            isBag: false
         }
     },
 
-    Predicate: (lparen, expressions, rparen) => {
-        // TODO: I don't believe the current JSON structure is expressive enough to handle "or", which the syntax does
-        return expressions.sourceString
+    Predicate: (lsquarebracket, expression, rsquarebracket) => {
+        return expression.asRuntimeJSON
     },
 
     PredicateExp_chain: (exp1, logicOperator, exp2) => {
-        return this.sourceString
+        let operator = logicOperator.sourceString
+        if (operator === "&&") operator = "and"
+        if (operator === "||") operator = "or"
+
+        let result = {}
+        result[operator] = [ exp1.asRuntimeJSON, exp2.asRuntimeJSON ]
+        return result
     },
 
-    PredicateExp_explicit: (ifOperator, boolean) => {
-        return this.sourceString
+    PredicateExp_explicit: (ifOperator, predicateExp) => {
+        if (ifOperator.sourceString === "if") {
+            return predicateExp.asRuntimeJSON
+        } else {
+            return {not: predicateExp.asRuntimeJSON}
+        }
     },
 
-    // TODO: This shouldn't exist.
     PredicateExp_parens: (lparen, exp, rparen) => {
-        return exp.sourceString
+        return exp.asRuntimeJSON
     },
 
     PredicateExp_implicit: (exp) => {
-        return exp.sourceString
+        return exp.asRuntimeJSON
     },
 
     BooleanExp_exists: (identifier, operator) => {
        let result = {}
        // operator can be either "exists" or "doesnt exist"
-       result[identifier] = { "exists": (operator === "exists") }
+       const exists = (operator.sourceString === "exists")
+       result[identifier.sourceString] = { "exists": exists }
        return result
     },
 
-    BooleanExp_comparison: (first, comparator, second) => {
+    BooleanExp_comparison: (firstObj, comparatorObj, secondObj) => {
+        const first = firstObj.sourceString
+        const comparator = comparatorObj.sourceString
+        const second = secondObj.sourceString
+
         // TODO: This if block is a smell I'm doing something wrong.
         let result = {};
         if (comparator === "=" || comparator === "==" || comparator === "is") {
-            result[first] = { "eq": second.sourceString }
+            result[first] = { "eq": second }
         } else if (comparator === "!=" || comparator === "isnt") {
             // TODO
-            result[first] = { "neq": second.sourceString }
+            result[first] = { "neq": second }
         } else if (comparator === "<=") {
-            result[first] = { "lte": second.sourceString };
+            result[first] = { "lte": second };
         } else if (comparator === ">=") {
-            result[first] = { "gte": second.sourceString };
+            result[first] = { "gte": second };
         } else if (comparator === "<") {
             //TODO
-            result[first] = { "lt": second.sourceString };
+            result[first] = { "lt": second };
         } else if (comparator === ">") {
             // TODO
-            result[first] = { "gt": second.sourceString };
+            result[first] = { "gt": second };
         } else {
             throw new Error("Found unexpected comparator")
         }
@@ -89,7 +118,7 @@ const asRuntimeJSON = {
 
     BooleanExp_truthy: (ident) => {
         let result = {}
-        result[ident] = { "eq": true }
+        result[ident.sourceString] = { "eq": true }
         return result
     },
 
@@ -154,10 +183,11 @@ const asRuntimeJSON = {
 
     Comment: (_1, _2) => undefined,
 
-    Title_noEnd: (_, title) => title.sourceString,            
-    Title_noEndBag: (_, title) => title.sourceString,
-    Title_end: (_1, title, _2) => title.sourceString,
-    Title_endBag: (_1, title, _2) => title.sourceString
+    BagTitle_noEnd: (_, title) => title.sourceString,
+    BagTitle_end: (_1, title, _2) => title.sourceString,
+
+    GraphTitle_noEnd: (_, title) => title.sourceString,
+    GraphTitle_end: (_1, title, _2) => title.sourceString,
 }
 
 function parseString(text) {

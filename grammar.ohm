@@ -1,40 +1,44 @@
 Story {
 
-Story = Node+
+Story = Predicate
+
+Start = "start: " ident
 
 Node
-  = Title Predicate Passage+ Choice* -- bag
-  | Title Passage+ Choice* -- graph
-  
-Title
-  = "##" ident "##" -- endBag
-  | "##" ident -- noEndBag
-  | "#" ident "#" -- end
+  = GraphTitle Predicate? Passage+ Choice* -- graph
+  | BagTitle Predicate? Passage+ Choice* -- bag
+
+BagTitle
+  = "##" ident "##" -- end
+  | "##" ident -- noEnd
+
+GraphTitle
+  = "#" ident "#" -- end
   | "#" ident -- noEnd
-   
+
 Predicate
   = "[" PredicateExp "]"
-  
-PredicateExp
-  = 
-  | PredicateExp logicOperator PredicateExp -- chain
-  | ifOperator BooleanExp -- explicit
-  | "(" PredicateExp ")" -- parens  
-  | BooleanExp -- implicit  
 
-  
+PredicateExp
+  =
+  | PredicateExp logicOperator PredicateExp -- chain
+  | ifOperator PredicateExp -- explicit
+  | "(" PredicateExp ")" -- parens
+  | BooleanExp -- implicit
+
+
 BooleanExp
    = ident existenceOperator -- exists
    | ident comparator ident -- comparison
    | ident -- truthy
-  
+
 // TODO: Rename passage
 Passage
   = Comment
   | specialInstruction -- instruction
   | Predicate content+ -- predicate
   | content+ -- noPredicate
-  
+
 Choice
   = Choice content* -- inlineBagNode
   | choiceOperator ident ": " Predicate -- named
@@ -45,30 +49,30 @@ Choice
 // Right now, they have to be their own line, and can only be used as a "Passage"
 Comment
   = "--" sentence
- 
+
 content
   = ident ": " sentence
 
 // Primitives
 // TODO: steal judiciously from the ES5 example
-  
+
 ident  (an identifier)
   = symbol*
-  
+
 sentence
   = "\"" doubleQuoteSymbol* "\"" -- quote
   | unquotedTextSymbol* -- noQuote
-  
+
 doubleQuoteSymbol
   = unquotedTextSymbol | "\n"
 
 unquotedTextSymbol
   = symbol | " "
 
-symbol 
+symbol
   = alnum | "_" | "." | "!" | "," | "'" | "{" | "}" | "?" | "-"
 
-   
+
 comparator
   = "=="
   | "!="
@@ -78,18 +82,18 @@ comparator
   | ">"
   | "<"
   | "is"
-  | "isnt"  
+  | "isnt"
 
 existenceOperator
   = "exists"
   | "doesnt exist"
- 
+
 ifOperator
   = "if"
   | "unless"
   | "not"
   | "if not"
-  
+
 logicOperator
   = "&&"
   | "||"
@@ -99,8 +103,8 @@ logicOperator
 choiceOperator
   = "<->"
   | "->"
-  
+
 specialInstruction
   = "allows_repeats" | "dead_end"
-  
+
 }

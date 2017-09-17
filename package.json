@@ -12,7 +12,7 @@
     "mocha": "^3.4.2"
   },
   "scripts": {
-    "test": "mocha spec/spec.js"
+    "test": "mocha spec"
   },
   "repository": {
     "type": "git",
