@@ -9,10 +9,13 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "mocha": "^3.4.2"
+    "@types/node": "^8.0.28",
+    "mocha": "^3.4.2",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.2"
   },
   "scripts": {
-    "test": "mocha spec"
+    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register spec"
   },
   "repository": {
     "type": "git",
