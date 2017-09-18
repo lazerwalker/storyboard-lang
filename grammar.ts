@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import ohm from 'ohm-js';
-const _ = require('underscore')
+import * as _ from 'lodash';
 
 const grammarText = fs.readFileSync('grammar.ohm', 'utf8')
 const grammar = ohm.grammar(grammarText)
@@ -8,13 +8,13 @@ const grammar = ohm.grammar(grammarText)
 const elevatorText = fs.readFileSync('elevator.story')
 
 const asRuntimeJSON = {
-    Story: (predicate) => {
+    Story: (start, nodes) => {
         // TODO: Would be nice if we could remove 'isBag',
         // whether removing it from use entirely or just stripping it from output
         let result = _(nodes.children).chain()
             .map((n) => n.asRuntimeJSON)
             .groupBy((n) => n.isBag ? "bag" : "graph")
-            .mapObject((val, key) => _.indexBy(val, 'nodeId'))
+            .mapValues((val: any[]) => _.keyBy(val, 'nodeId'))
             .value()
 
         if (result.graph) {
