@@ -1,13 +1,11 @@
 import * as fs from 'fs';
-import ohm from 'ohm-js';
+import * as ohm from 'ohm-js';
 import * as _ from 'lodash';
 
 const grammarText = fs.readFileSync('grammar.ohm', 'utf8')
 const grammar = ohm.grammar(grammarText)
 
-const elevatorText = fs.readFileSync('elevator.story')
-
-const asRuntimeJSON = {
+const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     Story: (start, nodes) => {
         // TODO: Would be nice if we could remove 'isBag',
         // whether removing it from use entirely or just stripping it from output
@@ -58,7 +56,7 @@ const asRuntimeJSON = {
         if (operator === "&&") operator = "and"
         if (operator === "||") operator = "or"
 
-        let result = {}
+        let result: any = {} // TODO: Type definitions
         result[operator] = [ exp1.asRuntimeJSON, exp2.asRuntimeJSON ]
         return result
     },
@@ -80,7 +78,7 @@ const asRuntimeJSON = {
     },
 
     BooleanExp_exists: (identifier, operator) => {
-       let result = {}
+       let result: any = {} // TODO
        // operator can be either "exists" or "doesnt exist"
        const exists = (operator.sourceString === "exists")
        result[identifier.sourceString] = { "exists": exists }
@@ -93,7 +91,7 @@ const asRuntimeJSON = {
         const second = secondObj.sourceString
 
         // TODO: This if block is a smell I'm doing something wrong.
-        let result = {};
+        let result: any = {};
         if (comparator === "=" || comparator === "==" || comparator === "is") {
             result[first] = { "eq": second }
         } else if (comparator === "!=" || comparator === "isnt") {
@@ -113,14 +111,14 @@ const asRuntimeJSON = {
     },
 
     BooleanExp_truthy: (ident) => {
-        let result = {}
+        let result: any = {}
         result[ident.sourceString] = { "eq": true }
         return result
     },
 
     // TODO: These special instructions (e.g. allows_repeat) need to be shoved on the higher-level JSON object rather than the passage array
     Passage_instruction: (instruction) => {
-        let result = {}
+        let result: any = {}
         result[instruction.sourceString] = true
         return result
     },
@@ -186,7 +184,7 @@ const asRuntimeJSON = {
     GraphTitle_end: (_1, title, _2) => title.sourceString,
 }
 
-function parseString(text) {
+export function parseString(text: string) {
     const semantics = grammar.createSemantics()
     const match = grammar.match(text)
     const result = semantics(match)
@@ -195,5 +193,3 @@ function parseString(text) {
 
     return result.asRuntimeJSON;
 }
-
-exports.parseString = parseString

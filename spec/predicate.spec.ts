@@ -1,13 +1,12 @@
-const expect = require('chai').expect;
-const fs = require('fs');
+import { expect } from 'chai'
 
-const Grammar = require('../grammar')
+import { parseString } from '../grammar'
 
 describe("predicates", function() {
   context("PredicateExp_BooleanExp", () => {
     it("BooleanExp_truthy", () => {
       const exp = "[ foo ]"
-      const parsed = Grammar.parseString(exp)
+      const parsed = parseString(exp)
       expect(parsed).to.eql({
         foo: { eq: true }
       })
@@ -15,7 +14,7 @@ describe("predicates", function() {
 
     it("BooleanExp_comparison", () => {
       const exp = "[ foo == 5 ]"
-      const parsed = Grammar.parseString(exp)
+      const parsed = parseString(exp)
       expect(parsed).to.eql({
         foo: { eq: "5" }
       })
@@ -24,7 +23,7 @@ describe("predicates", function() {
     context("BooleanExp_exists", () => {
       it("exists", () => {
         const exp = "[ foo exists ]"
-        const parsed = Grammar.parseString(exp)
+        const parsed = parseString(exp)
         expect(parsed).to.eql({
           foo: { exists: true }
         })
@@ -32,7 +31,7 @@ describe("predicates", function() {
 
       it("doesn't exist", () => {
         const exp = "[ foo doesnt exist ]"
-        const parsed = Grammar.parseString(exp)
+        const parsed = parseString(exp)
         expect(parsed).to.eql({
           foo: { exists: false }
         })
@@ -44,7 +43,7 @@ describe("predicates", function() {
   context("PredicateExp_Parens", () => {
     it("should parse as normal", () => {
       const exp = "[ (foo == bar) ]"
-      const parsed = Grammar.parseString(exp)
+      const parsed = parseString(exp)
       expect(parsed).to.eql({
         foo: { eq: "bar" }
       })
@@ -55,7 +54,7 @@ describe("predicates", function() {
     context("when the ifOperator is 'if'", () => {
       it("should parse as normal", () => {
         const exp = "[ if foo == bar.baz ]"
-        const parsed = Grammar.parseString(exp)
+        const parsed = parseString(exp)
         expect(parsed).to.eql({
           foo: { eq: "bar.baz" }
         })
@@ -65,7 +64,7 @@ describe("predicates", function() {
     context("when the ifOperator negates the expression", () => {
       it("should return a negated predicate object", () => {
         const exp = "[ unless foo == bar ]"
-        const parsed = Grammar.parseString(exp)
+        const parsed = parseString(exp)
         expect(parsed).to.eql({
           not: {
             foo: { eq: "bar" }
@@ -78,7 +77,7 @@ describe("predicates", function() {
   context("PredicateExp_chain", () => {
     it("should parse when logic operator is 'and'", () => {
       const exp = "[ foo and bar exists ]"
-      const parsed = Grammar.parseString(exp)
+      const parsed = parseString(exp)
       expect(parsed).to.eql({
         and: [
           {foo: { eq: true }},
@@ -89,7 +88,7 @@ describe("predicates", function() {
 
     it("should parse when logic operator is '&&'", () => {
       const exp = "[ foo && bar exists ]"
-      const parsed = Grammar.parseString(exp)
+      const parsed = parseString(exp)
       expect(parsed).to.eql({
         and: [
           {foo: { eq: true }},
@@ -100,7 +99,7 @@ describe("predicates", function() {
 
     it("should parse when logic operator is 'or'", () => {
       const exp = "[ if foo or bar < 10 ]"
-      const parsed = Grammar.parseString(exp)
+      const parsed = parseString(exp)
       expect(parsed).to.eql({
         or: [
           {foo: { eq: true }},
@@ -110,7 +109,7 @@ describe("predicates", function() {
 
       it("should parse when logic operator is '||'", () => {
         const exp = "[ foo || bar exists ]"
-        const parsed = Grammar.parseString(exp)
+        const parsed = parseString(exp)
         expect(parsed).to.eql({
           or: [
             {foo: { eq: true }},
