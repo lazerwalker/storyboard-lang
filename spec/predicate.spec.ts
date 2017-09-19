@@ -18,11 +18,78 @@ describe("predicates", function() {
       })
     })
 
-    it("BooleanExp_comparison", () => {
-      const exp = "[ foo == 5 ]"
-      const parsed = parsePredicate(exp)
-      expect(parsed).to.eql({
-        foo: { eq: "5" }
+    context("BooleanExp_comparison", () => {
+      it("should parse equals", () => {
+        const exp = "[ foo == 5 ]"
+        const parsed = parsePredicate(exp)
+        expect(parsed).to.eql({
+          foo: { eq: "5" }
+        })
+      })
+
+      it("should parse not-equals", () => {
+        // TODO: Does the engine have "neq", or should this be a negation of eq?
+        const exp = "[ foo != 5 ]"
+        const parsed = parsePredicate(exp)
+        expect(parsed).to.eql({
+          foo: { neq: "5" }
+        })
+      })
+
+      it("should parse 'isnt' as not-equals", () => {
+        const exp = "[ foo isnt 5 ]"
+        const parsed = parsePredicate(exp)
+        expect(parsed).to.eql({
+          foo: { neq: "5" }
+        })
+      })
+
+      it("should parse single-equals", () => {
+        const exp = "[ foo = 5 ]"
+        const parsed = parsePredicate(exp)
+        expect(parsed).to.eql({
+          foo: { eq: "5" }
+        })
+      })
+
+      it("should parse 'is' as equals", () => {
+        const exp = "[ foo is 5 ]"
+        const parsed = parsePredicate(exp)
+        expect(parsed).to.eql({
+          foo: { eq: "5" }
+        })
+      })
+
+      it("should parse less than or equal", () => {
+        const exp = "[ foo <= 5 ]"
+        const parsed = parsePredicate(exp)
+        expect(parsed).to.eql({
+          foo: { lte: "5" }
+        })
+      })
+
+      it("should parse greater than or equal", () => {
+        const exp = "[ foo >= bar ]"
+        const parsed = parsePredicate(exp)
+        expect(parsed).to.eql({
+          foo: { gte: "bar" }
+        })
+      })
+
+      it("should parse less than", () => {
+        const exp = "[ foo < 5 ]"
+        const parsed = parsePredicate(exp)
+        expect(parsed).to.eql({
+          foo: { lt: "5" }
+        })
+      })
+
+      it("should parse greater than", () => {
+        const exp = "[ foo > 10 ]"
+        const parsed = parsePredicate(exp)
+        expect(parsed).to.eql({
+          foo: { gt: "10" }
+        })
       })
     })
 
@@ -68,13 +135,39 @@ describe("predicates", function() {
     })
 
     context("when the ifOperator negates the expression", () => {
-      it("should return a negated predicate object", () => {
-        const exp = "[ unless foo == bar ]"
-        const parsed = parsePredicate(exp)
-        expect(parsed).to.eql({
-          not: {
-            foo: { eq: "bar" }
-          }
+      context("unless", () => {
+        it("should return a negated predicate object", () => {
+          const exp = "[ unless foo == bar ]"
+          const parsed = parsePredicate(exp)
+          expect(parsed).to.eql({
+            not: {
+              foo: { eq: "bar" }
+            }
+          })
+        })
+      })
+
+      context("not", () => {
+        it("should return a negated predicate object", () => {
+          const exp = "[ not foo ]"
+          const parsed = parsePredicate(exp)
+          expect(parsed).to.eql({
+            not: {
+              foo: { eq: true }
+            }
+          })
+        })
+      })
+
+      context("if not", () => {
+        it("should return a negated predicate object", () => {
+          const exp = "[ if not foo ]"
+          const parsed = parsePredicate(exp)
+          expect(parsed).to.eql({
+            not: {
+              foo: { eq: true }
+            }
+          })
         })
       })
     })

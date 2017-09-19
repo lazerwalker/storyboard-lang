@@ -81,8 +81,8 @@ comparator
   | ">="
   | ">"
   | "<"
-  | "is"
   | "isnt"
+  | "is"
 
 existenceOperator
   = "exists"
