@@ -41,7 +41,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
         return {
             nodeId: title.asRuntimeJSON,
             passages: passages.children.map( (p) => p.asRuntimeJSON ),
-            predicate: predicate.asRuntimeJSON,
+            predicate: predicate.children[0].asRuntimeJSON,
             choices: choices.children.map( (c) => c.asRuntimeJSON ),
             isBag: false
         }
@@ -190,6 +190,5 @@ export function parseString(text: string) {
     const result = semantics(match)
 
     semantics.addAttribute('asRuntimeJSON', asRuntimeJSON)
-
     return result.asRuntimeJSON;
 }

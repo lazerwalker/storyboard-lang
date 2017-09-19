@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 
 import { parseString } from '../grammar'
 
-describe('elevator', function() {
+describe.skip('elevator', function() {
   it('should parse properly', function() {
     let json = readFileSync(__dirname + '/../examples/elevator.json', 'utf8');
     json = JSON.stringify(JSON.parse(json), null, 2)

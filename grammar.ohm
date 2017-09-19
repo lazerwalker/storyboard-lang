@@ -1,11 +1,11 @@
 Story {
 
-Story = Predicate
+Story = Start? Node+
 
 Start = "start: " ident
 
 Node
-  = GraphTitle Predicate? Passage+ Choice* -- graph
+  = GraphTitle Predicate? Passage* Choice* -- graph
   | BagTitle Predicate? Passage+ Choice* -- bag
 
 BagTitle
