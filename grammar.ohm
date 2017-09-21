@@ -5,8 +5,8 @@ Story = Start? Node+
 Start = "start: " ident
 
 Node
-  = GraphTitle Predicate? Passage* Choice* -- graph
-  | BagTitle Predicate? Passage+ Choice* -- bag
+  = BagTitle Predicate? Passage* Choice* -- bag
+  | GraphTitle Predicate? Passage* Choice* -- graph
 
 BagTitle
   = "##" ident "##" -- end
