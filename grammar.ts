@@ -27,6 +27,14 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
                 nodes: result.graph
             }
         }
+
+        if (result.graph.nodes) {
+            _.forEach(result.graph.nodes, (n: any) => delete n.isBag)
+        }
+        if (result.graph.bag) {
+            _.forEach(result.graph.bag, (n: any) => delete n.isBag)
+        }
+
         return result
     },
 
