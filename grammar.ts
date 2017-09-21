@@ -5,6 +5,12 @@ import * as _ from 'lodash';
 const grammarText = fs.readFileSync('grammar.ohm', 'utf8')
 const grammar = ohm.grammar(grammarText)
 
+function coerceValue(value: string): any {
+    if (value === "true") { return true }
+    if (value === "false") { return false }
+    return value
+}
+
 const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     Story: (start, nodes) => {
         // TODO: Would be nice if we could remove 'isBag',
@@ -91,9 +97,9 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     },
 
     BooleanExp_comparison: (firstObj, comparatorObj, secondObj) => {
-        const first = firstObj.sourceString
+        const first = coerceValue(firstObj.sourceString)
         const comparator = comparatorObj.sourceString
-        const second = secondObj.sourceString
+        const second = coerceValue(secondObj.sourceString)
 
         // TODO: This if block is a smell I'm doing something wrong.
         let result: any = {};

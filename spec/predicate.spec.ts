@@ -91,6 +91,24 @@ describe("predicates", function() {
           foo: { gt: "10" }
         })
       })
+
+      describe("type coersion", () => {
+        it("should coerce 'true' into boolean", () => {
+          const exp = "[ foo is true ]"
+          const parsed = parsePredicate(exp)
+          expect(parsed).to.eql({
+            foo: { eq: true }
+          })
+        })
+
+        it("should coerce 'false' into boolean", () => {
+          const exp = "[ foo is false ]"
+          const parsed = parsePredicate(exp)
+          expect(parsed).to.eql({
+            foo: { eq: false }
+          })
+        })
+      })
     })
 
     context("BooleanExp_exists", () => {
