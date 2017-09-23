@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import { parseString } from '../grammar'
 
-describe("passages", function() {
+describe("passages", () => {
   context("without a predicate", () => {
     it("should properly parse", () => {
       const input = `

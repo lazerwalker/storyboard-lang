@@ -34,4 +34,3 @@ start: check_location
 ## bg_music ##
     track: background
     mp3: bg_track
-

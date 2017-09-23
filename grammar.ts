@@ -47,7 +47,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
 
     Start: (_, nodeId) => nodeId.sourceString,
 
-    Node_bag: (title, predicate, passages, choices) => {
+    Node_bag: (title, predicate, passages, choices, specialInstructions) => {
         return {
             nodeId: title.asRuntimeJSON,
             passages: passages.children.map( (p) => p.asRuntimeJSON ),
@@ -57,7 +57,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
         }
     },
 
-    Node_graph: (title, predicate, passages, choices) => {
+    Node_graph: (title, predicate, passages, choices, specialInstructions) => {
         let result: any = {
             nodeId: title.asRuntimeJSON,
             passages: passages.children.map( (p) => p.asRuntimeJSON ),
@@ -67,6 +67,14 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
 
         if (predicate.children.length > 0) {
             result.predicate = predicate.children[0].asRuntimeJSON;
+        }
+
+        const instructions = specialInstructions.children.map((n: ohm.Node) => n.sourceString)
+        if (_.includes(instructions, "deadEnd")) {
+            delete result.choices
+        }
+        if (_.includes(instructions, "allowRepeats")) {
+            result.allowRepeats = true
         }
 
         return result;
@@ -138,13 +146,6 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     BooleanExp_truthy: (ident) => {
         let result: any = {}
         result[ident.sourceString] = { "eq": true }
-        return result
-    },
-
-    // TODO: These special instructions (e.g. allows_repeat) need to be shoved on the higher-level JSON object rather than the passage array
-    Passage_instruction: (instruction) => {
-        let result: any = {}
-        result[instruction.sourceString] = true
         return result
     },
 
