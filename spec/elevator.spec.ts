@@ -4,7 +4,7 @@ import { readFileSync } from 'fs';
 import { parseString } from '../grammar'
 
 describe('elevator', function() {
-  it.only('should parse properly', function() {
+  it.skip('should parse properly', function() {
     let json = readFileSync(__dirname + '/../examples/elevator.json', 'utf8');
     json = JSON.parse(json)
 

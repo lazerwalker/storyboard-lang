@@ -36,8 +36,8 @@ BooleanExp
 Passage
   = Comment
   | specialInstruction -- instruction
-  | Predicate content+ -- predicate
-  | content+ -- noPredicate
+  | Predicate content -- predicate
+  | content -- noPredicate
 
 Choice
   = Choice content* -- inlineBagNode

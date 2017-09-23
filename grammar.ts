@@ -11,6 +11,8 @@ function coerceValue(value: string): any {
     return value
 }
 
+var currentId = 0;
+
 const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     Story: (start, nodes) => {
         // TODO: Would be nice if we could remove 'isBag',
@@ -26,7 +28,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
                 nodes: result.graph
             }
 
-            if (start) {
+            if (start.numChildren === 1) {
                 result.graph.start = start.asRuntimeJSON[0]
             }
         }
@@ -147,16 +149,21 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     },
 
     Passage_predicate: (predicate, content) => {
-        // TODO: Assign passage ID
         let result = content.asRuntimeJSON
-        result.passageId = "id"
+        result.passageId = currentId.toString()
         result.predicate = predicate.asRuntimeJSON
+
+        currentId += 1
+
         return result
     },
 
     Passage_noPredicate: (content) => {
         let result = content.asRuntimeJSON
-        result.passageId = "id"
+        result.passageId = currentId.toString()
+
+        currentId += 1
+
         return result
     },
 
@@ -208,6 +215,8 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
 }
 
 export function parseString(text: string) {
+    currentId = 0;
+
     const semantics = grammar.createSemantics()
     const match = grammar.match(text)
     const result = semantics(match)
