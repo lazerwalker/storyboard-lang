@@ -17,11 +17,11 @@ start: check_location
         speech: "I need you to put on headphones, and then put your {device}
             in your pocket or handbag. Don't worry, I'll wait for you."
 
-    -> [headphones and proximity]
+    -> take_the_elevator: [headphones and proximity]
 
 # take_the_elevator #
     speech: Awesome. Now take the elevator to the fourth floor.
-    -> [altitude >= 11 and altitude <= 12]
+    -> fourth_floor: [altitude >= 11 and altitude <= 12]
 
 # fourth_floor #
     speech: Welcome to the fourth floor!
@@ -33,4 +33,4 @@ start: check_location
 
 ## bg_music ##
     track: background
-    mp3: bg_track
+    mp3: SoWhat

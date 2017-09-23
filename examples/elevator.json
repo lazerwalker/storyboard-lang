@@ -24,27 +24,27 @@
             "content": "Hi!"
           },
           {
-            "passageId": "3",
+            "passageId": "2",
             "type": "speech",
             "predicate": { "and": [
               { "headphones": {"eq": true} },
-              { "proximity": {"eq": false} }
+              { "not": {"proximity": { "eq": true} }}
             ]},
             "content": "I'm glad you're already wearing headphones. I just need you to put your {device} in your pocket or your handbag. Don't worry, I'll wait for you."
           },
           {
-            "passageId": "2",
+            "passageId": "3",
             "type": "speech",
-            "predicate": { "headphones": {"lte": 0}},
+            "predicate": { "not": { "headphones": {"eq": true}} },
             "content": "I need you to put on headphones, and then put your {device} in your pocket or handbag. Don't worry, I'll wait for you."
           }
         ],
         "choices": [{
             "nodeId": "take_the_elevator",
-            "predicate": { "and": {
-              "proximity": { "eq": true },
-              "headphones": { "eq": true }
-            }}
+            "predicate": { "and": [
+              {"headphones": { "eq": true }},
+              {"proximity": { "eq": true }}
+            ]}
         }]
       },
       "take_the_elevator": {
@@ -56,10 +56,11 @@
         }],
         "choices": [
           {
-            "nodeId": "3",
-            "predicate": {
-              "altitude": { "gte": 11, "lte": 12 }
-            }
+            "nodeId": "fourth_floor",
+            "predicate": { "and": [
+              { "altitude": { "gte": "11" } },
+              { "altitude": { "lte": "12" } }
+            ]}
           }
         ]
       },
@@ -76,6 +77,7 @@
   "bag": {
     "went_down": {
       "nodeId": "went_down",
+      "choices": [],
       "passages": [{
         "passageId": "6",
         "type": "speech",
@@ -87,6 +89,7 @@
     },
     "bg_music": {
       "nodeId": "bg_music",
+      "choices": [],
       "track": "background",
       "passages": [{
         "passageId": "7",
