@@ -2,7 +2,7 @@
   "graph": {
     "nodes": {
       "0": {
-        "nodeId": "0", 
+        "nodeId": "0",
         "passages": [
           {
             "passageId": "0",
@@ -13,7 +13,7 @@
             "passageId": "1",
             "type": "turnOnLight",
             "content": "Mabel"
-          },        
+          },
           {
             "passageId": "2",
             "type": "text",
@@ -22,11 +22,28 @@
         ],
         "choices": [{
           "nodeId": "1",
-          "predicate": { 
+          "predicate": {
             "Mabel.cable": { "exists": true },
             "Mabel.isFront": { "eq": false }
-          }  
-        }]
+          }
+        }],
+        "bagNodes": [
+          {
+            "nodeId": "7",
+            "predicate": {
+              "graph.currentNodeId": { "eq": "0" },
+              "connectWrongPerson": { "exists": true }
+            },
+            "allowRepeats": true,
+            "passages": [
+              {
+                "passageId": "26",
+                "type": "text",
+                "content": "Whoops! You want to connect to Mabel instead of {connectWrongPerson}."
+              }
+            ]
+          }
+        ]
       },
       "1": {
         "nodeId": "1",
@@ -40,7 +57,7 @@
             "passageId": "1",
             "type": "turnOffLight",
             "content": "Mabel"
-          },          
+          },
           {
             "passageId": "3",
             "type": "text",
@@ -80,11 +97,11 @@
             "nodeId": "3",
             "predicate": {
               "Mabel.cable": {"exists": true},
-              "Mabel.isFront": { "eq": false },             
+              "Mabel.isFront": { "eq": false },
               "Dolores.cable": { "eq": "Mabel.cable" },
               "Dolores.isFront": { "eq": true }
             }
-          }      
+          }
         ]
       },
       "3": {
@@ -104,7 +121,7 @@
               "Dolores.isFront": { "eq": true },
               "Dolores.switch": {"eq": 1 }
             }
-          }      
+          }
         ]
       },
       "4": {
@@ -149,12 +166,12 @@
             "passageId": "27",
             "type": "turnOffLight",
             "content": "{Mabel.cableString}"
-          }          
+          }
         ],
         "choices": [
           {
             "nodeId": "5"
-          }   
+          }
         ]
       },
       "5": {
@@ -190,21 +207,7 @@
     }
   },
   "bag": {
-    "7": {
-      "nodeId": "7",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "0" },
-        "connectWrongPerson": { "exists": true }
-      },
-      "allowRepeats": true,
-      "passages": [
-        {
-          "passageId": "26",
-          "type": "text",
-          "content": "Whoops! You want to connect to Mabel instead of {connectWrongPerson}."
-        }
-      ]
-    },
+
     "8": {
       "nodeId": "8",
       "predicate": {
@@ -397,6 +400,6 @@
           "content": "You shouldn't disconnect them until they're done talking. Their lights will turn off when they're done."
         }
       ]
-    }    
+    }
   }
 }

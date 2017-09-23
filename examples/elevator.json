@@ -1,21 +1,22 @@
 {
   "graph": {
+    "start": "check_location",
     "nodes": {
-      "0": {
-        "nodeId": "0", 
-        "predicate": { "insideTheMediaLab": { "lte": 0 }},
+      "check_location": {
+        "nodeId": "check_location",
+        "predicate": { "insideTheMediaLab": { "eq": false }},
         "passages": [{
           "passageId": "0",
           "type": "speech",
           "content": "You need to be in the E14 lobby to begin."
         }],
         "choices": [{
-          "nodeId": "1",
-          "predicate": { "insideTheMediaLab": { "gte": 1 }}  
+          "nodeId": "headphone_check",
+          "predicate": { "insideTheMediaLab": { "eq": true }}
         }]
       },
-      "1": {
-        "nodeId": "1",
+      "headphone_check": {
+        "nodeId": "headphone_check",
         "passages": [
           {
             "passageId": "1",
@@ -25,27 +26,29 @@
           {
             "passageId": "3",
             "type": "speech",
-            "predicate": { "headphones": {"gte": 1},
-                           "proximity": {"lte": 0}},
+            "predicate": { "and": [
+              { "headphones": {"eq": true} },
+              { "proximity": {"eq": false} }
+            ]},
             "content": "I'm glad you're already wearing headphones. I just need you to put your {device} in your pocket or your handbag. Don't worry, I'll wait for you."
           },
           {
             "passageId": "2",
-            "type": "speech",            
+            "type": "speech",
             "predicate": { "headphones": {"lte": 0}},
             "content": "I need you to put on headphones, and then put your {device} in your pocket or handbag. Don't worry, I'll wait for you."
           }
         ],
         "choices": [{
-            "nodeId": "2",
-            "predicate": {
-              "proximity": { "gte": 1 },
-              "headphones": { "gte": 1 }
-            }
+            "nodeId": "take_the_elevator",
+            "predicate": { "and": {
+              "proximity": { "eq": true },
+              "headphones": { "eq": true }
+            }}
         }]
       },
-      "2": {
-        "nodeId": "2",
+      "take_the_elevator": {
+        "nodeId": "take_the_elevator",
         "passages": [{
           "passageId": "4",
           "type": "speech",
@@ -57,11 +60,11 @@
             "predicate": {
               "altitude": { "gte": 11, "lte": 12 }
             }
-          }      
+          }
         ]
       },
-      "3": {
-        "nodeId": "3",
+      "fourth_floor": {
+        "nodeId": "fourth_floor",
         "passages": [{
           "passageId": "5",
           "type": "speech",
@@ -71,8 +74,8 @@
     }
   },
   "bag": {
-    "4": {
-      "nodeId": "4",
+    "went_down": {
+      "nodeId": "went_down",
       "passages": [{
         "passageId": "6",
         "type": "speech",
@@ -82,8 +85,8 @@
         "altitude": { "lte": "graph.previousChoice.predicate.altitude.gte" }
       }
     },
-    "5": {
-      "nodeId": "5",
+    "bg_music": {
+      "nodeId": "bg_music",
       "track": "background",
       "passages": [{
         "passageId": "7",

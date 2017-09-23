@@ -1,20 +1,22 @@
-# start #
+start: check_location
+
+# check_location #
     [unless insideTheMediaLab]
         speech: You need to be in the E14 lobby to begin.
     -> headphone_check: [insideTheMediaLab is true]
 
 # headphone_check #
     speech: Hi!
-    
+
     [if headphones and not proximity]
-        speech: "I'm glad you're already wearing headphones. I just need you to 
-            put your {device} in your pocket or your handbag. Don't worry, 
+        speech: "I'm glad you're already wearing headphones. I just need you to
+            put your {device} in your pocket or your handbag. Don't worry,
             I'll wait for you."
-    
+
     [unless headphones]
-        speech: "I need you to put on headphones, and then put your {device} 
+        speech: "I need you to put on headphones, and then put your {device}
             in your pocket or handbag. Don't worry, I'll wait for you."
-    
+
     -> [headphones and proximity]
 
 # take_the_elevator #
