@@ -4,7 +4,7 @@
     "nodes": {
       "check_location": {
         "nodeId": "check_location",
-        "predicate": { "insideTheMediaLab": { "eq": false }},
+        "predicate": { "not": { "insideTheMediaLab": { "eq": true }}},
         "passages": [{
           "passageId": "0",
           "type": "speech",
