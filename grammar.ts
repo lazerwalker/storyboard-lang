@@ -23,8 +23,11 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
 
         if (result.graph) {
             result.graph = {
-                start: start.asRuntimeJSON,
                 nodes: result.graph
+            }
+
+            if (start) {
+                result.graph.start = start.asRuntimeJSON[0]
             }
         }
 
@@ -51,7 +54,6 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     },
 
     Node_graph: (title, predicate, passages, choices) => {
-        // TODO: what if predicate doesn't exist?
         let result: any = {
             nodeId: title.asRuntimeJSON,
             passages: passages.children.map( (p) => p.asRuntimeJSON ),
