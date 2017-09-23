@@ -25,7 +25,7 @@ start: check_location
 
 # fourth_floor #
     speech: Welcome to the fourth floor!
-    dead_end
+    deadEnd
 
 ## went_down ##
     [altitude <= graph.previousChoice.predicate.altitude.gte]
