@@ -11,7 +11,8 @@ function coerceValue(value: string): any {
   return value
 }
 
-var currentId = 0;
+var currentPassageId = 0;
+var currentInlineBagNodeId = 0;
 
 const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
   Story: (start, nodes) => {
@@ -33,6 +34,24 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
       }
 
       _.forEach(result.graph.nodes, (n: any) => delete n.isBag)
+
+      _.forEach(result.graph.nodes, (n: any) => {
+        if (n.choices) {
+          let actualChoices = n.choices.filter((o: any) => _.isUndefined(o.passages))
+          let inlineBagNodes = _.difference(n.choices, actualChoices)
+          n.choices = actualChoices
+
+          inlineBagNodes.forEach((bagNode: any) => {
+            bagNode.predicate = { and: [
+              {"graph.currentNodeId": { eq: n.nodeId }},
+              bagNode.predicate
+            ]}
+
+            if (!result.bag) { result.bag = {} }
+            result.bag[bagNode.nodeId] = bagNode
+          })
+        }
+      })
     }
 
     if (result.bag) {
@@ -77,7 +96,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     let result: any = {
       nodeId: title.asRuntimeJSON,
       passages: passages.children.map( (p) => p.asRuntimeJSON ),
-      choices: choices.children.map( (c) => c.asRuntimeJSON ),
+      choices: choices.children.map( (n) => n.asRuntimeJSON ),
       isBag: false
     };
 
@@ -163,42 +182,40 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
 
   Passage_predicate: (predicate, content) => {
     let result = content.asRuntimeJSON
-    result.passageId = currentId.toString()
+    result.passageId = currentPassageId.toString()
     result.predicate = predicate.asRuntimeJSON
 
-    currentId += 1
+    currentPassageId += 1
 
     return result
   },
 
   Passage_noPredicate: (content) => {
     let result = content.asRuntimeJSON
-    result.passageId = currentId.toString()
+    result.passageId = currentPassageId.toString()
 
-    currentId += 1
+    currentPassageId += 1
 
     return result
   },
 
-  Choice_inlineBagNode: (choice, content) => {
-    // TODO: This needs to be thought about.
-    // Does the runtime schema get modified to allow nested nodes, or do these get transformed into normal bag nodes at compile time?
-    let result = choice.asRuntimeJSON
-    result.content = content.asRuntimeJSON
-    return result
+  Choice_inlineBagNode: (_, predicate, content) => {
+    const passages = content.children.map((n) => n.asRuntimeJSON)
+
+    const title = `inlineBag_${currentInlineBagNodeId}`
+    currentInlineBagNodeId += 1
+
+    return {
+      nodeId: title,
+      predicate: predicate.asRuntimeJSON,
+      passages: content.children.map( (n) => n.asRuntimeJSON ),
+      isBag: true
+    };
   },
 
   Choice_named: (operator, ident, _, predicate) => {
     return {
       nodeId: ident.sourceString,
-      predicate: predicate.asRuntimeJSON
-    }
-  },
-
-  Choice_unnamed: (operator, predicate) => {
-    // TODO: How do we fetch the "next" nodeId?
-    // Maybe the runtime engine simply goes to the next one if there's no nodeId present?
-    return {
       predicate: predicate.asRuntimeJSON
     }
   },
@@ -230,7 +247,8 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
 }
 
 export function parseString(text: string) {
-  currentId = 0;
+  currentPassageId = 0;
+  currentInlineBagNodeId = 0;
 
   const semantics = grammar.createSemantics()
   const match = grammar.match(text)

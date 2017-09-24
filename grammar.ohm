@@ -39,9 +39,8 @@ Passage
   | content -- noPredicate
 
 Choice
-  = Choice content* -- inlineBagNode
-  | choiceOperator ident ": " Predicate -- named
-  | choiceOperator Predicate --unnamed
+  = "->" ident ": " Predicate -- named
+  | "<->" Predicate Passage* -- inlineBagNode
 
 // TODO: These aren't handled properly
 // (should be embeddable ANYWHERE.
@@ -98,10 +97,6 @@ logicOperator
   | "||"
   | "and"
   | "or"
-
-choiceOperator
-  = "<->"
-  | "->"
 
 specialInstruction
   = "allowRepeats" | "deadEnd"
