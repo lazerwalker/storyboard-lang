@@ -6,7 +6,7 @@ Start = "start: " ident
 
 Node
   = BagTitle Predicate? Passage* Choice* specialInstruction* -- bag
-  | GraphTitle Predicate? Passage* Choice* specialInstruction* -- graph
+  | GraphTitle Passage* Choice* specialInstruction* -- graph
 
 BagTitle
   = "##" ident "##" -- end

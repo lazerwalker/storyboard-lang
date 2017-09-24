@@ -31,11 +31,10 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
             if (start.numChildren === 1) {
                 result.graph.start = start.asRuntimeJSON[0]
             }
-        }
 
-        if (result.graph.nodes) {
             _.forEach(result.graph.nodes, (n: any) => delete n.isBag)
         }
+
         if (result.bag) {
             _.forEach(result.bag, (n: any) => {
                 delete n.isBag
@@ -70,17 +69,13 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
         return result;
     },
 
-    Node_graph: (title, predicate, passages, choices, specialInstructions) => {
+    Node_graph: (title, passages, choices, specialInstructions) => {
         let result: any = {
             nodeId: title.asRuntimeJSON,
             passages: passages.children.map( (p) => p.asRuntimeJSON ),
             choices: choices.children.map( (c) => c.asRuntimeJSON ),
             isBag: false
         };
-
-        if (predicate.children.length > 0) {
-            result.predicate = predicate.children[0].asRuntimeJSON;
-        }
 
         const instructions = specialInstructions.children.map((n: ohm.Node) => n.sourceString)
         if (_.includes(instructions, "deadEnd")) {

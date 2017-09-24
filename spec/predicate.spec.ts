@@ -3,9 +3,9 @@ import { expect } from 'chai'
 import { parseString } from '../grammar'
 
 function parsePredicate(predicate: string): string {
-  const node = `# testNode\n${predicate}`
+  const node = `## testNode\n${predicate}`
   const parsed = parseString(node)
-  return parsed.graph.nodes.testNode.predicate
+  return parsed.bag.testNode.predicate
 }
 
 describe("predicates", function() {

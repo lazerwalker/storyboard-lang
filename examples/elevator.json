@@ -4,11 +4,11 @@
     "nodes": {
       "check_location": {
         "nodeId": "check_location",
-        "predicate": { "not": { "insideTheMediaLab": { "eq": true }}},
         "passages": [{
           "passageId": "0",
           "type": "speech",
-          "content": "You need to be in the E14 lobby to begin."
+          "content": "You need to be in the E14 lobby to begin.",
+          "predicate": { "not": { "insideTheMediaLab": { "eq": true }}}
         }],
         "choices": [{
           "nodeId": "headphone_check",
