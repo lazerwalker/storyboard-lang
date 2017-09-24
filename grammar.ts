@@ -46,7 +46,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
 
   Start: (_, nodeId) => nodeId.sourceString,
 
-  Node_bag: (title, predicate, passages, choices, specialInstructions) => {
+  Node_bag: (title, predicate, track, passages, choices, specialInstructions) => {
     let result: any = {
       nodeId: title.asRuntimeJSON,
       passages: passages.children.map( (p) => p.asRuntimeJSON ),
@@ -56,6 +56,10 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
 
     if (predicate.children.length > 0) {
       result.predicate = predicate.children[0].asRuntimeJSON;
+    }
+
+    if (track.children.length === 1) {
+      result.track = track.children[0].asRuntimeJSON
     }
 
     const instructions = specialInstructions.children.map((n: ohm.Node) => n.sourceString)
@@ -198,6 +202,8 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
       predicate: predicate.asRuntimeJSON
     }
   },
+
+  track: (_, track) => track.sourceString,
 
   content: (ident, _, content) => {
     return {
