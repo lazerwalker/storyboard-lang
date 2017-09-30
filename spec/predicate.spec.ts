@@ -192,6 +192,35 @@ describe("predicates", function() {
   })
 
   context("PredicateExp_chain", () => {
+    context("when there are more than two things being chained", () => {
+      it("should nest them", () => {
+        const exp = "[ foo and bar and baz ]"
+        const parsed = parsePredicate(exp)
+        expect(parsed).to.eql({
+          and: [
+            {foo: { eq: true }},
+            { and: [
+              {bar: { eq: true}},
+              {baz: { eq: true}}
+            ]}
+          ]
+        })
+      })
+
+      // TODO: This is what we actually want to happen
+      it.skip("should not nest them", () => {
+        const exp = "[ foo and bar and baz ]"
+        const parsed = parsePredicate(exp)
+        expect(parsed).to.eql({
+          and: [
+            {foo: { eq: true }},
+            {bar: { eq: true}},
+            {baz: { eq: true}}
+          ]
+        })
+      })
+    })
+
     it("should parse when logic operator is 'and'", () => {
       const exp = "[ foo and bar exists ]"
       const parsed = parsePredicate(exp)
