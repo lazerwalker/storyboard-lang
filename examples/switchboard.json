@@ -1,8 +1,8 @@
 {
   "graph": {
     "nodes": {
-      "0": {
-        "nodeId": "0",
+      "welcome": {
+        "nodeId": "welcome",
         "passages": [
           {
             "passageId": "0",
@@ -21,32 +21,15 @@
           }
         ],
         "choices": [{
-          "nodeId": "1",
-          "predicate": {
-            "Mabel.cable": { "exists": true },
-            "Mabel.isFront": { "eq": false }
-          }
-        }],
-        "bagNodes": [
-          {
-            "nodeId": "7",
-            "predicate": {
-              "graph.currentNodeId": { "eq": "0" },
-              "connectWrongPerson": { "exists": true }
-            },
-            "allowRepeats": true,
-            "passages": [
-              {
-                "passageId": "26",
-                "type": "text",
-                "content": "Whoops! You want to connect to Mabel instead of {connectWrongPerson}."
-              }
-            ]
-          }
-        ]
+          "nodeId": "first_switch",
+          "predicate": { "and": [
+            { "Mabel.cable": { "exists": true } },
+            { "Mabel.isFront": { "eq": false } }
+          ]}
+        }]
       },
-      "1": {
-        "nodeId": "1",
+      "first_switch": {
+        "nodeId": "first_switch",
         "passages": [
           {
             "passageId": "cableLight1",
@@ -65,16 +48,16 @@
           }
         ],
         "choices": [{
-            "nodeId": "2",
-            "predicate": {
-              "Mabel.cable": { "exists": true },
-              "Mabel.isFront": { "eq": false },
-              "Mabel.switch": { "eq": -1 }
-            }
+            "nodeId": "connect_to_dolores",
+            "predicate": { "and": [
+              { "Mabel.cable": { "exists": true } },
+              { "Mabel.isFront": { "eq": false } },
+              { "Mabel.switch": { "eq": -1 } }
+            ]}
         }]
       },
-      "2": {
-        "nodeId": "2",
+      "connect_to_dolores": {
+        "nodeId": "connect_to_dolores",
         "passages": [
           {
             "passageId": "4",
@@ -94,18 +77,18 @@
         ],
         "choices": [
           {
-            "nodeId": "3",
-            "predicate": {
-              "Mabel.cable": {"exists": true},
-              "Mabel.isFront": { "eq": false },
-              "Dolores.cable": { "eq": "Mabel.cable" },
-              "Dolores.isFront": { "eq": true }
-            }
+            "nodeId": "ring_dolores",
+            "predicate": { "and": [
+              { "Mabel.cable": {"exists": true } },
+              { "Mabel.isFront": { "eq": false } },
+              { "Dolores.cable": { "eq": "Mabel.cable" } },
+              { "Dolores.isFront": { "eq": true } }
+            ]}
           }
         ]
       },
-      "3": {
-        "nodeId": "3",
+      "ring_dolores": {
+        "nodeId": "ring_dolores",
         "passages": [{
           "passageId": "6",
           "type": "text",
@@ -113,19 +96,19 @@
         }],
         "choices": [
           {
-            "nodeId": "4",
-            "predicate": {
-              "Mabel.cable": { "exists": true },
-              "Mabel.isFront": { "eq": false },
-              "Dolores.cable": { "eq": "Mabel.cable" },
-              "Dolores.isFront": { "eq": true },
-              "Dolores.switch": {"eq": 1 }
-            }
+            "nodeId": "dolores_blinking",
+            "predicate": { "and": [
+              { "Mabel.cable": { "exists": true } },
+              { "Mabel.isFront": { "eq": false } },
+              { "Dolores.cable": { "eq": "Mabel.cable" } },
+              { "Dolores.isFront": { "eq": true } },
+              { "Dolores.switch": {"eq": 1 } }
+            ]}
           }
         ]
       },
-      "4": {
-        "nodeId": "4",
+      "dolores_blinking": {
+        "nodeId": "dolores_blinking",
         "passages": [
           {
             "passageId": "7",
@@ -170,27 +153,27 @@
         ],
         "choices": [
           {
-            "nodeId": "5"
+            "nodeId": "disconnect"
           }
         ]
       },
-      "5": {
-        "nodeId": "5",
+      "disconnect": {
+        "nodeId": "disconnect",
         "passages": [{
           "passageId": "11",
           "type": "text",
           "content": "They've finished their call, so you can disconnect their cables now."
         }],
         "choices": [{
-          "nodeId": "6",
-          "predicate": {
-            "Mabel.cable": { "exists": false },
-            "Dolores.cable": { "exists": false }
-          }
+          "nodeId": "start_game",
+          "predicate": { "and": [
+            { "Mabel.cable": { "exists": false } },
+            { "Dolores.cable": { "exists": false } }
+          ]}
         }]
       },
-      "6": {
-        "nodeId": "6",
+      "start_game": {
+        "nodeId": "start_game",
         "passages": [
           {
             "passageId": "12",
@@ -207,13 +190,27 @@
     }
   },
   "bag": {
-
-    "8": {
-      "nodeId": "8",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "0" },
-        "connectWrongCable": { "eq": true }
-      },
+    "inlineBag_0": {
+      "nodeId": "inlineBag_0",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "welcome" } },
+        { "connectWrongPerson": { "exists": true } }
+      ]},
+      "allowRepeats": true,
+      "passages": [
+        {
+          "passageId": "26",
+          "type": "text",
+          "content": "Whoops! You want to connect to Mabel instead of {connectWrongPerson}."
+        }
+      ]
+    },
+    "inlineBag_1": {
+      "nodeId": "inlineBag_1",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "welcome" } },
+        { "connectWrongCable": { "eq": true } }
+      ]},
       "allowRepeats": true,
       "passages": [
         {
@@ -223,12 +220,12 @@
         }
       ]
     },
-    "9": {
-      "nodeId": "9",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "0" },
-        "toggleWrongSwitch": { "exists": true }
-      },
+    "inlineBag_2": {
+      "nodeId": "inlineBag_2",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "welcome" } },
+        { "toggleWrongSwitch": { "exists": true } }
+      ]},
       "allowRepeats": true,
       "passages": [
         {
@@ -238,12 +235,12 @@
         }
       ]
     },
-    "10": {
-      "nodeId": "10",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "1" },
-        "toggleWrongSwitchInPair": { "exists": true }
-      },
+    "inlineBag_3": {
+      "nodeId": "inlineBag_3",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "first_switch" } },
+        { "toggleWrongSwitchInPair": { "exists": true } }
+      ]},
       "allowRepeats": true,
       "passages": [
         {
@@ -253,12 +250,12 @@
         }
       ]
     },
-    "11": {
-      "nodeId": "11",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "1" },
-        "toggleWrongSwitch": { "exists": true }
-      },
+    "inlineBag_4": {
+      "nodeId": "inlineBag_4",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "first_switch" } },
+        { "toggleWrongSwitch": { "exists": true } }
+      ]},
       "allowRepeats": true,
       "passages": [
         {
@@ -268,12 +265,12 @@
         }
       ]
     },
-    "12": {
-      "nodeId": "12",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "1" },
-        "toggleWrongSwitchDirection": { "exists": true }
-      },
+    "inlineBag_5": {
+      "nodeId": "inlineBag_5",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "first_switch" } },
+        { "toggleWrongSwitchDirection": { "exists": true } }
+      ]},
       "allowRepeats": true,
       "passages": [
         {
@@ -283,12 +280,12 @@
         }
       ]
     },
-    "13": {
-      "nodeId": "13",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "2" },
-        "toggleWrongSwitch": { "exists": true }
-      },
+    "inlineBag_6": {
+      "nodeId": "inlineBag_6",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "connect_to_dolores" } },
+        { "toggleWrongSwitch": { "exists": true } }
+      ]},
       "allowRepeats": true,
       "passages": [
         {
@@ -298,12 +295,12 @@
         }
       ]
     },
-    "14": {
-      "nodeId": "14",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "2" },
-        "connectWrongPerson": { "exists": true }
-      },
+    "inlineBag_7": {
+      "nodeId": "inlineBag_7",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "connect_to_dolores" } },
+        { "connectWrongPerson": { "exists": true } }
+      ]},
       "allowRepeats": true,
       "passages": [
         {
@@ -313,12 +310,12 @@
         }
       ]
     },
-    "15": {
-      "nodeId": "15",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "2" },
-        "connectWrongCable": { "exists": true }
-      },
+    "inlineBag_8": {
+      "nodeId": "inlineBag_8",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "connect_to_dolores" } },
+        { "connectWrongCable": { "exists": true } }
+      ]},
       "allowRepeats": true,
       "passages": [
         {
@@ -328,12 +325,12 @@
         }
       ]
     },
-    "16": {
-      "nodeId": "16",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "3" },
-        "toggleWrongSwitchDirection": { "exists": true }
-      },
+    "inlineBag_9": {
+      "nodeId": "inlineBag_9",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "ring_dolores" } },
+        { "toggleWrongSwitchDirection": { "exists": true } }
+      ]},
       "allowRepeats": true,
       "passages": [
         {
@@ -343,12 +340,12 @@
         }
       ]
     },
-    "17": {
-      "nodeId": "17",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "3" },
-        "toggleWrongSwitchInPair": { "exists": true }
-      },
+    "inlineBag_10": {
+      "nodeId": "inlineBag_10",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "ring_dolores" } },
+        { "toggleWrongSwitchInPair": { "exists": true } }
+      ]},
       "allowRepeats": true,
       "passages": [
         {
@@ -358,12 +355,12 @@
         }
       ]
     },
-    "18": {
-      "nodeId": "18",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "3" },
-        "toggleWrongSwitch": { "exists": true }
-      },
+    "inlineBag_11": {
+      "nodeId": "inlineBag_11",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "ring_dolores" } },
+        { "toggleWrongSwitch": { "exists": true } }
+      ]},
       "allowRepeats": true,
       "passages": [
         {
@@ -373,12 +370,12 @@
         }
       ]
     },
-    "19": {
-      "nodeId": "19",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "4" },
-        "Mabel.cable": { "exists": false }
-      },
+    "inlineBag_12": {
+      "nodeId": "inlineBag_12",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "dolores_blinking" } },
+        { "Mabel.cable": { "exists": false } }
+      ]},
       "passages": [
         {
           "passageId": "24",
@@ -387,12 +384,15 @@
         }
       ]
     },
-    "20": {
-      "nodeId": "20",
-      "predicate": {
-        "graph.currentNodeId": { "eq": "4" },
-        "Dolores.cable": { "exists": false }
-      },
+    "inlineBag_13": {
+      "nodeId": "inlineBag_13",
+      "predicate": { "and": [
+        { "graph.currentNodeId": { "eq": "dolores_blinking" } },
+        { "or": [
+          { "Dolores.cable": { "exists": false } },
+          { "Mabel.cable": { "exists": false } }
+        ]}
+      ]},
       "passages": [
         {
           "passageId": "25",
