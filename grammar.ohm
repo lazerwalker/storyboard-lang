@@ -5,8 +5,8 @@ Story = Start? Node+
 Start = "start: " ident
 
 Node
-  = BagTitle Predicate? (track|Passage|Choice|specialInstruction)* -- bag
-  | GraphTitle (Passage|Choice|specialInstruction)* -- graph
+  = BagTitle Predicate? (track|Passage|Choice|specialInstruction|Comment)* -- bag
+  | GraphTitle (Passage|Choice|specialInstruction|Comment)* -- graph
 
 BagTitle
   = "##" ident "##" -- end
@@ -34,8 +34,7 @@ BooleanExp
 
 // TODO: Rename passage
 Passage
-  = Comment
-  | Predicate content -- predicate
+  = Predicate content -- predicate
   | content -- noPredicate
 
 Choice
