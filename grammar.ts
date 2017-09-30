@@ -258,6 +258,12 @@ export function parseString(text: string) {
 
   const semantics = grammar.createSemantics()
   const match = grammar.match(text)
+
+  if (match.failed()) {
+    console.log(match.message)
+    return
+  }
+
   const result = semantics(match)
 
   semantics.addAttribute('asRuntimeJSON', asRuntimeJSON)
