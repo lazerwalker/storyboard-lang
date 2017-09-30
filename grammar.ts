@@ -212,17 +212,38 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     return result
   },
 
-  Choice_inlineBagNode: (_, predicate, content) => {
-    const passages = content.children.map((n) => n.asRuntimeJSON)
+  Choice_inlineBagNode: (_1, predicate, content) => {
+    const grouped = _.groupBy(content.children, "ctorName")
+    const track = grouped["track"] || []
+    const passages = grouped["Passage"] || []
+    const specialInstructions = grouped["specialInstruction"] || []
+
+    const parsedPassages = passages.map((n: ohm.Node) => n.asRuntimeJSON)
 
     const title = `inlineBag_${currentInlineBagNodeId}`
     currentInlineBagNodeId += 1
 
-    return {
+    let result: any = {
       nodeId: title,
       predicate: predicate.asRuntimeJSON,
-      passages: content.children.map( (n) => n.asRuntimeJSON ),
-    };
+      passages: parsedPassages
+    }
+
+    const instructions = specialInstructions.map((n: ohm.Node) => n.sourceString)
+    if (_.includes(instructions, "deadEnd")) {
+      delete result.choices
+    }
+    if (_.includes(instructions, "allowRepeats")) {
+      result.allowRepeats = true
+    }
+
+    if (track.length === 1) {
+      result.track = track[0].asRuntimeJSON
+    } else {
+      // TODO: Throw an error if track.length > 1
+    }
+
+    return result;
   },
 
   Choice_predicate: (operator, ident, _, predicate) => {

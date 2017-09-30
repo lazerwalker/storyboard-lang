@@ -39,7 +39,7 @@ Passage
 Choice
   = "->" ident ": " Predicate -- predicate
   | "->" ident -- noPredicate
-  | "<->" Predicate Passage* -- inlineBagNode
+  | "<->" Predicate (track|specialInstruction|Passage|Comment)* -- inlineBagNode
 
 // TODO: These aren't handled properly
 // (should be embeddable ANYWHERE.

@@ -8,6 +8,8 @@ describe("inline bag nodes", () => {
       const input = `
         # testNode
         <-> [ score > 5 and gameIsOver ]
+          allowRepeats
+          track: firstTrack
           text: You did it! You have a high score of {score}!
       `
 
@@ -24,6 +26,8 @@ describe("inline bag nodes", () => {
         bag: {
           "inlineBag_0": {
             nodeId: "inlineBag_0",
+            track: "firstTrack",
+            allowRepeats: true,
             predicate: { "and": [
               { "graph.currentNodeId": { eq: "testNode" }},
               { and: [
