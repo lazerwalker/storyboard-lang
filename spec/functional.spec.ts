@@ -21,7 +21,7 @@ describe('full example scripts', function() {
     expect(parsed).to.eql(json);
   })
 
-  it.skip("should parse switchboard", () => {
+  it("should parse switchboard", () => {
     const json = loadJSON("switchboard")
     const parsed = loadAndParseStory("switchboard")
 

@@ -11,18 +11,18 @@
         back row."
 
     <-> [connectWrongPerson exists]
-        text: Whoops! You want to connect to Mabel instead of {connectWrongPerson}
+        text: Whoops! You want to connect to Mabel instead of {connectWrongPerson}.
         allowRepeats
 
-    <-> [connectWrongCable]
+    <-> [connectWrongCable exists]
         text: Whoops! You want to use one of the cables in the row farthest away from you.
         allowRepeats
 
-    <-> [toggleWrongSwitch]
+    <-> [toggleWrongSwitch exists]
         text: Whoops! You don't want to touch the switches yet.
         allowRepeats
 
-    -> first_switch: [Mabel.cable exists and Mable.isFront is false]
+    -> first_switch: [Mabel.cable exists and Mabel.isFront is false]
 
 # first_switch
     turnOnLight: {Mabel.cableString}
@@ -34,16 +34,16 @@
         the one closest to the cable, and flip it away from you so you can hear
         her."
 
-    <-> [toggleWrongSwitchInPair is true]
+    <-> [toggleWrongSwitchInPair exists]
         text: Flip the switch farther away from you.
         allowRepeats
 
-    <-> [toggleWrongSwitch is true]
+    <-> [toggleWrongSwitch exists]
         text: "Flip the switch that corresponds with the cable you're using,
             not where Mabel is."
         allowRepeats
 
-    <-> [toggleWrongSwitchDirection is true]
+    <-> [toggleWrongSwitchDirection exists]
         text: Flip the switch the other way, so it's going away from you.
         allowRepeats
 
@@ -57,16 +57,16 @@
     text: "Perfect. Put the switch back in its place, and connect the matching
         front cable to Dolores."
 
-    <-> [toggleWrongSwitch]
+    <-> [toggleWrongSwitch exists]
         -- We should be able to combine this with dont_use_switches?
         text: You shouldn't need to touch any switches!
         allowRepeats
 
-    <-> [connectWrongPerson]
+    <-> [connectWrongPerson exists]
         text: You're supposed to connect to Dolores, not {connectWrongPerson}.
         allowRepeats
 
-    <-> [connectWrongCable]
+    <-> [connectWrongCable exists]
         text: "You want to use the cable that's directly in front of the one you
             used with Mabel."
         allowRepeats
@@ -80,15 +80,15 @@
     text: "Now, you need to ring Dolores so she knows someone's calling.
         Take the front switch and pull it towards you."
 
-    <-> [toggleWrongSwitchDirection]
-        text: Pull the switch towards you, not away from you
+    <-> [toggleWrongSwitchDirection exists]
+        text: Pull the switch towards you, not away from you.
         allowRepeats
 
-    <-> [toggleWrongSwitchInPair]
+    <-> [toggleWrongSwitchInPair exists]
         text: Use the switch that's closer to you.
         allowRepeats
 
-    <-> [toggleWrongSwitch]
+    <-> [toggleWrongSwitch exists]
         text: "Use the switch that's in the same row as the cables you're using."
         allowRepeats
 
@@ -112,7 +112,7 @@
     turnOffLight: {Dolores.cableString}
     turnOffLight: {Mabel.cableString}
 
-    <-> [Mable.cable doesnt exist or Dolores.cable doesnt exist]
+    <-> [Mabel.cable doesnt exist or Dolores.cable doesnt exist]
         text: "You shouldn't disconnect them until they're done talking. Their
             lights will turn off when they're done."
         allowRepeats
@@ -120,9 +120,10 @@
     -> disconnect
 
 # disconnect
-    text: "They've finished their call, so you can disconnect their cables now"
+    text: "They've finished their call, so you can disconnect their cables now."
     -> start_game: [Mabel.cable doesnt exist and Dolores.cable doesnt exist]
 
 # start_game
     text: "It seems like you've've got it!
         Things will pick up rather quickly, so do try to keep up"
+    deadEnd

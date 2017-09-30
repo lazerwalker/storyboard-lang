@@ -32,17 +32,17 @@
         "nodeId": "first_switch",
         "passages": [
           {
-            "passageId": "cableLight1",
+            "passageId": "6",
             "type": "turnOnLight",
             "content": "{Mabel.cableString}"
           },
           {
-            "passageId": "1",
+            "passageId": "7",
             "type": "turnOffLight",
             "content": "Mabel"
           },
           {
-            "passageId": "3",
+            "passageId": "8",
             "type": "text",
             "content": "Great. Now Mabel needs to be able to tell you who she wants to talk to. See those two switches in front of the cable you plugged in? Take the one closest to the cable, and flip it away from you so you can hear her."
           }
@@ -51,8 +51,10 @@
             "nodeId": "connect_to_dolores",
             "predicate": { "and": [
               { "Mabel.cable": { "exists": true } },
-              { "Mabel.isFront": { "eq": false } },
-              { "Mabel.switch": { "eq": -1 } }
+              { "and": [
+                { "Mabel.isFront": { "eq": false } },
+                { "Mabel.switch": { "eq": "-1" } }
+              ]}
             ]}
         }]
       },
@@ -60,19 +62,19 @@
         "nodeId": "connect_to_dolores",
         "passages": [
           {
-            "passageId": "4",
+            "passageId": "12",
             "type": "sayToConnect",
             "content": "Mabel,Dolores"
           },
           {
-            "passageId": "15",
+            "passageId": "13",
             "type": "pause",
             "content": "800"
           },
           {
-            "passageId": "5",
+            "passageId": "14",
             "type": "text",
-            "content": "Perfect. Put the switch back in its place, and connect the matching front cable to Dolores"
+            "content": "Perfect. Put the switch back in its place, and connect the matching front cable to Dolores."
           }
         ],
         "choices": [
@@ -80,9 +82,13 @@
             "nodeId": "ring_dolores",
             "predicate": { "and": [
               { "Mabel.cable": {"exists": true } },
-              { "Mabel.isFront": { "eq": false } },
-              { "Dolores.cable": { "eq": "Mabel.cable" } },
-              { "Dolores.isFront": { "eq": true } }
+              { "and": [
+                { "Mabel.isFront": { "eq": false } },
+                { "and": [
+                  { "Dolores.cable": { "eq": "Mabel.cable" } },
+                  { "Dolores.isFront": { "eq": true } }
+                ]}
+              ]}
             ]}
           }
         ]
@@ -90,7 +96,7 @@
       "ring_dolores": {
         "nodeId": "ring_dolores",
         "passages": [{
-          "passageId": "6",
+          "passageId": "18",
           "type": "text",
           "content": "Now, you need to ring Dolores so she knows someone's calling. Take the front switch and pull it towards you."
         }],
@@ -99,10 +105,16 @@
             "nodeId": "dolores_blinking",
             "predicate": { "and": [
               { "Mabel.cable": { "exists": true } },
-              { "Mabel.isFront": { "eq": false } },
-              { "Dolores.cable": { "eq": "Mabel.cable" } },
-              { "Dolores.isFront": { "eq": true } },
-              { "Dolores.switch": {"eq": 1 } }
+              { "and": [
+                { "Mabel.isFront": { "eq": false } },
+                { "and": [
+                  { "Dolores.cable": { "eq": "Mabel.cable" } },
+                  { "and": [
+                    { "Dolores.isFront": { "eq": true } },
+                    { "Dolores.switch": {"eq": "1" } }
+                  ]}
+                ]}
+              ]}
             ]}
           }
         ]
@@ -111,42 +123,42 @@
         "nodeId": "dolores_blinking",
         "passages": [
           {
-            "passageId": "7",
+            "passageId": "22",
             "type": "blinkLight",
             "content": "{Dolores.cableString},400"
           },
           {
-            "passageId": "8",
+            "passageId": "23",
             "type": "text",
             "content": "Great. The fact that it's blinking means the phone is ringing. She'll pick up in a few seconds."
           },
           {
-            "passageId": "15",
+            "passageId": "24",
             "type": "pause",
             "content": "1500"
           },
           {
-            "passageId": "16",
+            "passageId": "25",
             "type": "turnOnLight",
             "content": "{Dolores.cableString}"
           },
           {
-            "passageId": "10",
+            "passageId": "26",
             "type": "text",
             "content": "Now that the light is solid, she's picked up the call and they're talking. The lights will turn off when they're done."
           },
           {
-            "passageId": "14",
+            "passageId": "27",
             "type": "pause",
             "content": "3000"
           },
           {
-            "passageId": "16",
+            "passageId": "28",
             "type": "turnOffLight",
             "content": "{Dolores.cableString}"
           },
           {
-            "passageId": "27",
+            "passageId": "29",
             "type": "turnOffLight",
             "content": "{Mabel.cableString}"
           }
@@ -160,7 +172,7 @@
       "disconnect": {
         "nodeId": "disconnect",
         "passages": [{
-          "passageId": "11",
+          "passageId": "31",
           "type": "text",
           "content": "They've finished their call, so you can disconnect their cables now."
         }],
@@ -176,14 +188,9 @@
         "nodeId": "start_game",
         "passages": [
           {
-            "passageId": "12",
+            "passageId": "32",
             "type": "text",
             "content": "It seems like you've've got it! Things will pick up rather quickly, so do try to keep up"
-          },
-          {
-            "passageId": "13",
-            "type": "complete",
-            "content": "deleteme"
           }
         ]
       }
@@ -199,7 +206,7 @@
       "allowRepeats": true,
       "passages": [
         {
-          "passageId": "26",
+          "passageId": "3",
           "type": "text",
           "content": "Whoops! You want to connect to Mabel instead of {connectWrongPerson}."
         }
@@ -209,12 +216,12 @@
       "nodeId": "inlineBag_1",
       "predicate": { "and": [
         { "graph.currentNodeId": { "eq": "welcome" } },
-        { "connectWrongCable": { "eq": true } }
+        { "connectWrongCable": { "exists": true } }
       ]},
       "allowRepeats": true,
       "passages": [
         {
-          "passageId": "13",
+          "passageId": "4",
           "type": "text",
           "content": "Whoops! You want to use one of the cables in the row farthest away from you."
         }
@@ -229,7 +236,7 @@
       "allowRepeats": true,
       "passages": [
         {
-          "passageId": "14",
+          "passageId": "5",
           "type": "text",
           "content": "Whoops! You don't want to touch the switches yet."
         }
@@ -244,7 +251,7 @@
       "allowRepeats": true,
       "passages": [
         {
-          "passageId": "15",
+          "passageId": "9",
           "type": "text",
           "content": "Flip the switch farther away from you."
         }
@@ -259,7 +266,7 @@
       "allowRepeats": true,
       "passages": [
         {
-          "passageId": "16",
+          "passageId": "10",
           "type": "text",
           "content": "Flip the switch that corresponds with the cable you're using, not where Mabel is."
         }
@@ -274,7 +281,7 @@
       "allowRepeats": true,
       "passages": [
         {
-          "passageId": "17",
+          "passageId": "11",
           "type": "text",
           "content": "Flip the switch the other way, so it's going away from you."
         }
@@ -289,7 +296,7 @@
       "allowRepeats": true,
       "passages": [
         {
-          "passageId": "18",
+          "passageId": "15",
           "type": "text",
           "content": "You shouldn't need to touch any switches!"
         }
@@ -304,7 +311,7 @@
       "allowRepeats": true,
       "passages": [
         {
-          "passageId": "19",
+          "passageId": "16",
           "type": "text",
           "content": "You're supposed to connect to Dolores, not {connectWrongPerson}."
         }
@@ -319,7 +326,7 @@
       "allowRepeats": true,
       "passages": [
         {
-          "passageId": "20",
+          "passageId": "17",
           "type": "text",
           "content": "You want to use the cable that's directly in front of the one you used with Mabel."
         }
@@ -334,7 +341,7 @@
       "allowRepeats": true,
       "passages": [
         {
-          "passageId": "21",
+          "passageId": "19",
           "type": "text",
           "content": "Pull the switch towards you, not away from you."
         }
@@ -349,7 +356,7 @@
       "allowRepeats": true,
       "passages": [
         {
-          "passageId": "22",
+          "passageId": "20",
           "type": "text",
           "content": "Use the switch that's closer to you."
         }
@@ -364,38 +371,25 @@
       "allowRepeats": true,
       "passages": [
         {
-          "passageId": "23",
+          "passageId": "21",
           "type": "text",
           "content": "Use the switch that's in the same row as the cables you're using."
         }
       ]
     },
     "inlineBag_12": {
+      "allowRepeats": true,
       "nodeId": "inlineBag_12",
       "predicate": { "and": [
         { "graph.currentNodeId": { "eq": "dolores_blinking" } },
-        { "Mabel.cable": { "exists": false } }
-      ]},
-      "passages": [
-        {
-          "passageId": "24",
-          "type": "text",
-          "content": "You shouldn't disconnect them until they're done talking. Their lights will turn off when they're done."
-        }
-      ]
-    },
-    "inlineBag_13": {
-      "nodeId": "inlineBag_13",
-      "predicate": { "and": [
-        { "graph.currentNodeId": { "eq": "dolores_blinking" } },
         { "or": [
-          { "Dolores.cable": { "exists": false } },
-          { "Mabel.cable": { "exists": false } }
+          { "Mabel.cable": { "exists": false } },
+          { "Dolores.cable": { "exists": false } }
         ]}
       ]},
       "passages": [
         {
-          "passageId": "25",
+          "passageId": "30",
           "type": "text",
           "content": "You shouldn't disconnect them until they're done talking. Their lights will turn off when they're done."
         }
