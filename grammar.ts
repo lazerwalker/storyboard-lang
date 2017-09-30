@@ -213,10 +213,16 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     };
   },
 
-  Choice_named: (operator, ident, _, predicate) => {
+  Choice_predicate: (operator, ident, _, predicate) => {
     return {
       nodeId: ident.sourceString,
       predicate: predicate.asRuntimeJSON
+    }
+  },
+
+  Choice_noPredicate: (operator, ident) => {
+    return {
+      nodeId: ident.sourceString
     }
   },
 

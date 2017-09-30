@@ -39,7 +39,8 @@ Passage
   | content -- noPredicate
 
 Choice
-  = "->" ident ": " Predicate -- named
+  = "->" ident ": " Predicate -- predicate
+  | "->" ident -- noPredicate
   | "<->" Predicate Passage* -- inlineBagNode
 
 // TODO: These aren't handled properly

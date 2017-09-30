@@ -3,7 +3,22 @@ import { expect } from 'chai'
 import { parseString } from '../grammar'
 
 describe("choices", () => {
-  context("Choice_named", () => {
+  context("Choice_noPredicate", () => {
+    it("should jump straight there", () => {
+      const story = `
+        # node
+        text: Let's go!
+        -> destination
+      `
+      const parsed = parseString(story).graph.nodes.node.choices
+      expect(parsed).to.eql([
+        {
+          nodeId: "destination"
+        }
+      ])
+    })
+  })
+  context("Choice_predicate", () => {
     it("should create the proper choices", () => {
       const story = `
         # node
