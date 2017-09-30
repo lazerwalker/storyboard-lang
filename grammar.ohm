@@ -1,12 +1,11 @@
 Story {
 
-Story = Comment? Start? (Comment|Node)+
+Story = Comment? Start? (Comment|BagNode|GraphNode)+
 
 Start = "start: " ident
 
-Node
-  = BagTitle Predicate? (track|Passage|Choice|specialInstruction|Comment)* -- bag
-  | GraphTitle (Passage|Choice|specialInstruction|Comment)* -- graph
+BagNode = BagTitle Predicate? (track|Passage|Choice|specialInstruction|Comment)*
+GraphNode = GraphTitle (Passage|Choice|specialInstruction|Comment)*
 
 BagTitle
   = "##" ident "##" -- end

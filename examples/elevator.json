@@ -5,7 +5,7 @@
       "check_location": {
         "nodeId": "check_location",
         "passages": [{
-          "passageId": "0",
+          "passageId": "2",
           "type": "speech",
           "content": "You need to be in the E14 lobby to begin.",
           "predicate": { "not": { "insideTheMediaLab": { "eq": true }}}
@@ -19,12 +19,12 @@
         "nodeId": "headphone_check",
         "passages": [
           {
-            "passageId": "1",
+            "passageId": "3",
             "type": "speech",
             "content": "Hi!"
           },
           {
-            "passageId": "2",
+            "passageId": "4",
             "type": "speech",
             "predicate": { "and": [
               { "headphones": {"eq": true} },
@@ -33,7 +33,7 @@
             "content": "I'm glad you're already wearing headphones. I just need you to put your {device} in your pocket or your handbag. Don't worry, I'll wait for you."
           },
           {
-            "passageId": "3",
+            "passageId": "5",
             "type": "speech",
             "predicate": { "not": { "headphones": {"eq": true}} },
             "content": "I need you to put on headphones, and then put your {device} in your pocket or handbag. Don't worry, I'll wait for you."
@@ -50,7 +50,7 @@
       "take_the_elevator": {
         "nodeId": "take_the_elevator",
         "passages": [{
-          "passageId": "4",
+          "passageId": "6",
           "type": "speech",
           "content": "Awesome. Now take the elevator to the fourth floor."
         }],
@@ -67,7 +67,7 @@
       "fourth_floor": {
         "nodeId": "fourth_floor",
         "passages": [{
-          "passageId": "5",
+          "passageId": "7",
           "type": "speech",
           "content": "Welcome to the fourth floor!"
         }]
@@ -79,7 +79,7 @@
       "nodeId": "went_down",
       "choices": [],
       "passages": [{
-        "passageId": "6",
+        "passageId": "0",
         "type": "speech",
         "content": "I didn't tell you to go back down!"
       }],
@@ -92,7 +92,7 @@
       "choices": [],
       "track": "background",
       "passages": [{
-        "passageId": "7",
+        "passageId": "1",
         "type": "mp3",
         "content": "SoWhat"
       }]

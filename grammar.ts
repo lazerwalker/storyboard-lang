@@ -17,26 +17,31 @@ var currentInlineBagNodeId = 0;
 const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
   Story: (openingComment, start, content) => {
     const grouped = _.groupBy(content.children, "ctorName")
-    const nodes = grouped["Node"] || []
+    const bagNodes = grouped["BagNode"]
+    const graphNodes = grouped["GraphNode"]
 
-    // TODO: Would be nice if we could remove 'isBag',
-    // whether removing it from use entirely or just stripping it from output
-    let result = _(nodes).chain()
-    .map((n) => n.asRuntimeJSON)
-    .groupBy((n) => n.isBag ? "bag" : "graph")
-    .mapValues((val: any[]) => _.keyBy(val, 'nodeId'))
-    .value()
+    let result: any = {}
 
-    if (result.graph) {
+    if (bagNodes) {
+      result.bag = _.chain(bagNodes)
+        .map((n) => n.asRuntimeJSON)
+        .keyBy('nodeId')
+        .value()
+    }
+
+    if (graphNodes) {
+      let graph = _.chain(graphNodes)
+        .map((n) => n.asRuntimeJSON)
+        .keyBy('nodeId')
+        .value()
+
       result.graph = {
-        nodes: result.graph
+        nodes: graph
       }
 
       if (start.numChildren === 1) {
         result.graph.start = start.asRuntimeJSON[0]
       }
-
-      _.forEach(result.graph.nodes, (n: any) => delete n.isBag)
 
       _.forEach(result.graph.nodes, (n: any) => {
         if (n.choices) {
@@ -57,18 +62,12 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
       })
     }
 
-    if (result.bag) {
-      _.forEach(result.bag, (n: any) => {
-        delete n.isBag
-      })
-    }
-
     return result
   },
 
   Start: (_, nodeId) => nodeId.sourceString,
 
-  Node_bag: (title, predicate, children) => {
+  BagNode: (title, predicate, children) => {
     const grouped = _.groupBy(children.children, "ctorName")
     const passages = grouped["Passage"] || []
     const choices = grouped["Choice"] || []
@@ -78,8 +77,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     let result: any = {
       nodeId: title.asRuntimeJSON,
       passages: passages.map( (p) => p.asRuntimeJSON ),
-      choices: choices.map( (c) => c.asRuntimeJSON ),
-      isBag: true
+      choices: choices.map( (c) => c.asRuntimeJSON )
     };
 
     if (predicate.children.length > 0) {
@@ -103,7 +101,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     return result;
   },
 
-  Node_graph: (title, children) => {
+  GraphNode: (title, children) => {
     const grouped = _.groupBy(children.children, "ctorName")
     const passages = grouped["Passage"] || []
     const choices = grouped["Choice"] || []
@@ -113,7 +111,6 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
       nodeId: title.asRuntimeJSON,
       passages: passages.map( (p) => p.asRuntimeJSON ),
       choices: choices.map( (n) => n.asRuntimeJSON ),
-      isBag: false
     };
 
     const instructions = specialInstructions.map((n: ohm.Node) => n.sourceString)
@@ -225,7 +222,6 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
       nodeId: title,
       predicate: predicate.asRuntimeJSON,
       passages: content.children.map( (n) => n.asRuntimeJSON ),
-      isBag: true
     };
   },
 
