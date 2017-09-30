@@ -15,10 +15,13 @@ var currentPassageId = 0;
 var currentInlineBagNodeId = 0;
 
 const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
-  Story: (start, nodes) => {
+  Story: (openingComment, start, content) => {
+    const grouped = _.groupBy(content.children, "ctorName")
+    const nodes = grouped["Node"] || []
+
     // TODO: Would be nice if we could remove 'isBag',
     // whether removing it from use entirely or just stripping it from output
-    let result = _(nodes.children).chain()
+    let result = _(nodes).chain()
     .map((n) => n.asRuntimeJSON)
     .groupBy((n) => n.isBag ? "bag" : "graph")
     .mapValues((val: any[]) => _.keyBy(val, 'nodeId'))

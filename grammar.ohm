@@ -1,6 +1,6 @@
 Story {
 
-Story = Start? Node+
+Story = Comment? Start? (Comment|Node)+
 
 Start = "start: " ident
 
