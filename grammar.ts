@@ -65,11 +65,17 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
 
   Start: (_, nodeId) => nodeId.sourceString,
 
-  Node_bag: (title, predicate, track, passages, choices, specialInstructions) => {
+  Node_bag: (title, predicate, children) => {
+    const grouped = _.groupBy(children.children, "ctorName")
+    const passages = grouped["Passage"] || []
+    const choices = grouped["Choice"] || []
+    const specialInstructions = grouped["specialInstruction"] || []
+    const track = grouped["track"] || []
+
     let result: any = {
       nodeId: title.asRuntimeJSON,
-      passages: passages.children.map( (p) => p.asRuntimeJSON ),
-      choices: choices.children.map( (c) => c.asRuntimeJSON ),
+      passages: passages.map( (p) => p.asRuntimeJSON ),
+      choices: choices.map( (c) => c.asRuntimeJSON ),
       isBag: true
     };
 
@@ -77,11 +83,13 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
       result.predicate = predicate.children[0].asRuntimeJSON;
     }
 
-    if (track.children.length === 1) {
-      result.track = track.children[0].asRuntimeJSON
+    if (track.length === 1) {
+      result.track = track[0].asRuntimeJSON
+    } else {
+      // TODO: Throw an error if track.length > 1
     }
 
-    const instructions = specialInstructions.children.map((n: ohm.Node) => n.sourceString)
+    const instructions = specialInstructions.map((n: ohm.Node) => n.sourceString)
     if (_.includes(instructions, "deadEnd")) {
       delete result.choices
     }
@@ -92,15 +100,20 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     return result;
   },
 
-  Node_graph: (title, passages, choices, specialInstructions) => {
+  Node_graph: (title, children) => {
+    const grouped = _.groupBy(children.children, "ctorName")
+    const passages = grouped["Passage"] || []
+    const choices = grouped["Choice"] || []
+    const specialInstructions = grouped["specialInstruction"] || []
+
     let result: any = {
       nodeId: title.asRuntimeJSON,
-      passages: passages.children.map( (p) => p.asRuntimeJSON ),
-      choices: choices.children.map( (n) => n.asRuntimeJSON ),
+      passages: passages.map( (p) => p.asRuntimeJSON ),
+      choices: choices.map( (n) => n.asRuntimeJSON ),
       isBag: false
     };
 
-    const instructions = specialInstructions.children.map((n: ohm.Node) => n.sourceString)
+    const instructions = specialInstructions.map((n: ohm.Node) => n.sourceString)
     if (_.includes(instructions, "deadEnd")) {
       delete result.choices
     }
