@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as ohm from 'ohm-js';
 import * as _ from 'lodash';
+import * as Types from './types';
 
 const grammarText = fs.readFileSync('grammar.ohm', 'utf8')
 const grammar = ohm.grammar(grammarText)
@@ -14,8 +15,8 @@ function coerceValue(value: string): any {
 var currentPassageId = 0;
 var currentInlineBagNodeId = 0;
 
-const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
-  Story: (openingComment, start, content) => {
+const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => Types.StoryboardType|string|void} = {
+  Story: (openingComment, start, content): Types.Story => {
     const grouped = _.groupBy(content.children, "ctorName")
     const bagNodes = grouped["BagNode"]
     const graphNodes = grouped["GraphNode"]
@@ -67,7 +68,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
 
   Start: (_, nodeId) => nodeId.sourceString,
 
-  BagNode: (title, predicate, children) => {
+  BagNode: (title, predicate, children): Types.Node => {
     const grouped = _.groupBy(children.children, "ctorName")
     const passages = grouped["Passage"] || []
     const choices = grouped["Choice"] || []
@@ -101,7 +102,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     return result;
   },
 
-  GraphNode: (title, children) => {
+  GraphNode: (title, children): Types.Node => {
     const grouped = _.groupBy(children.children, "ctorName")
     const passages = grouped["Passage"] || []
     const choices = grouped["Choice"] || []
@@ -124,21 +125,21 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     return result;
   },
 
-  Predicate: (lsquarebracket, expression, rsquarebracket) => {
+  Predicate: (lsquarebracket, expression, rsquarebracket): Types.Predicate => {
     return expression.asRuntimeJSON
   },
 
-  PredicateExp_chain: (exp1, logicOperator, exp2) => {
+  PredicateExp_chain: (exp1, logicOperator, exp2): Types.Predicate => {
     let operator = logicOperator.sourceString
     if (operator === "&&") operator = "and"
     if (operator === "||") operator = "or"
 
-    let result: any = {} // TODO: Type definitions
+    let result: Types.Predicate = {} // TODO: Type definitions
     result[operator] = [ exp1.asRuntimeJSON, exp2.asRuntimeJSON ]
     return result
   },
 
-  PredicateExp_explicit: (ifOperator, predicateExp) => {
+  PredicateExp_explicit: (ifOperator, predicateExp): Types.Predicate => {
     if (ifOperator.sourceString === "if") {
       return predicateExp.asRuntimeJSON
     } else {
@@ -146,11 +147,11 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     }
   },
 
-  PredicateExp_parens: (lparen, exp, rparen) => {
+  PredicateExp_parens: (lparen, exp, rparen): Types.Predicate => {
     return exp.asRuntimeJSON
   },
 
-  PredicateExp_implicit: (exp) => {
+  PredicateExp_implicit: (exp): Types.Predicate => {
     return exp.asRuntimeJSON
   },
 
@@ -193,7 +194,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     return result
   },
 
-  Passage_predicate: (predicate, content) => {
+  Passage_predicate: (predicate, content): Types.Passage => {
     let result = content.asRuntimeJSON
     result.passageId = currentPassageId.toString()
     result.predicate = predicate.asRuntimeJSON
@@ -203,7 +204,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     return result
   },
 
-  Passage_noPredicate: (content) => {
+  Passage_noPredicate: (content): Types.Passage => {
     let result = content.asRuntimeJSON
     result.passageId = currentPassageId.toString()
 
@@ -212,7 +213,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     return result
   },
 
-  Choice_inlineBagNode: (_1, predicate, content) => {
+  Choice_inlineBagNode: (_1, predicate, content): Types.Choice => {
     const grouped = _.groupBy(content.children, "ctorName")
     const track = grouped["track"] || []
     const passages = grouped["Passage"] || []
@@ -246,20 +247,20 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     return result;
   },
 
-  Choice_predicate: (operator, ident, _, predicate) => {
+  Choice_predicate: (operator, ident, _, predicate): Types.Choice => {
     return {
       nodeId: ident.sourceString,
       predicate: predicate.asRuntimeJSON
     }
   },
 
-  Choice_noPredicate: (operator, ident) => {
+  Choice_noPredicate: (operator, ident): Types.Choice => {
     return {
       nodeId: ident.sourceString
     }
   },
 
-  track: (_, track) => track.sourceString,
+  track: (_, track): string => track.sourceString,
 
   content: (ident, _, content) => {
     return {
@@ -268,8 +269,8 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
     }
   },
 
-  sentence_noQuote: (content) => content.sourceString,
-  sentence_quote: (lquote, content, rquote) => {
+  sentence_noQuote: (content): string => content.sourceString,
+  sentence_quote: (lquote, content, rquote): string => {
     let result = content.sourceString
     result = result.replace("\n", "")
     result = result.replace(/\s+/g, " ")
@@ -278,11 +279,11 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => any} = {
 
   Comment: (_1, _2) => undefined,
 
-  BagTitle_noEnd: (_, title) => title.sourceString,
-  BagTitle_end: (_1, title, _2) => title.sourceString,
+  BagTitle_noEnd: (_, title): string => title.sourceString,
+  BagTitle_end: (_1, title, _2): string => title.sourceString,
 
-  GraphTitle_noEnd: (_, title) => title.sourceString,
-  GraphTitle_end: (_1, title, _2) => title.sourceString,
+  GraphTitle_noEnd: (_, title): string => title.sourceString,
+  GraphTitle_end: (_1, title, _2): string => title.sourceString,
 }
 
 export function parseString(text: string) {
