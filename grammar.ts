@@ -213,6 +213,33 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => Types.Storyboard
     return result
   },
 
+  Passage_variable: (variableAssignment): Types.Passage => {
+    let result = variableAssignment.asRuntimeJSON
+    result.passageId = currentPassageId.toString()
+
+    currentPassageId += 1
+
+    return result
+  },
+
+  Passage_variableWithPredicate: (predicate, variableAssignment): Types.Passage => {
+    let result = variableAssignment.asRuntimeJSON
+    result.passageId = currentPassageId.toString()
+    result.predicate = predicate.asRuntimeJSON
+
+    currentPassageId += 1
+
+    return result
+  },
+
+  VariableAssignment: (_1, key, _2, value): any => {
+    return {
+      set: {
+        [key.sourceString]: coerceValue(value.sourceString)
+      }
+    }
+  },
+
   Choice_inlineBagNode: (_1, predicate, content): Types.Choice => {
     const grouped = _.groupBy(content.children, "ctorName")
     const track = grouped["track"] || []

@@ -35,6 +35,11 @@ BooleanExp
 Passage
   = Predicate content -- predicate
   | content -- noPredicate
+  | VariableAssignment -- variable
+  | Predicate VariableAssignment -- variableWithPredicate
+
+VariableAssignment
+  = "set" ident ("="|"to") ident
 
 Choice
   = "->" ident ": " Predicate -- predicate
