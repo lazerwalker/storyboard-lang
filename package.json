@@ -20,10 +20,7 @@
   "scripts": {
     "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register spec"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lazerwalker/storyboard-lang.git"
-  },
+  "repository": "git+https://github.com/lazerwalker/storyboard-lang.git",
   "author": "michael@lazerwalker.com",
   "license": "MIT",
   "bugs": {
