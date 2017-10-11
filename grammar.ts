@@ -313,7 +313,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => Types.Storyboard
   GraphTitle_end: (_1, title, _2): string => title.sourceString,
 }
 
-export function parseString(text: string) {
+export function parseString(text: string): Types.Story|undefined {
   currentPassageId = 0;
   currentInlineBagNodeId = 0;
 
