@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { parseString } from '../grammar'
+import { parseString } from '../lib'
 
 describe("choices", () => {
   context("Choice_noPredicate", () => {
@@ -10,7 +10,7 @@ describe("choices", () => {
         text: Let's go!
         -> destination
       `
-      const parsed = parseString(story).graph.nodes.node.choices
+      const parsed = parseString(story)!.graph!.nodes.node.choices
       expect(parsed).to.eql([
         {
           nodeId: "destination"
@@ -28,7 +28,7 @@ describe("choices", () => {
         -> destination: [ weAreReady && timeBeforeLeaving is 0 ]
         -> prematureDestination: [ timeBeforeLeaving is 0 ]
       `
-      const parsed = parseString(story).graph.nodes.node.choices
+      const parsed = parseString(story)!.graph!.nodes.node.choices
       expect(parsed).to.eql([
         {
           nodeId: "destination",

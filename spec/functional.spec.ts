@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { readFileSync } from 'fs';
 
-import { parseString } from '../grammar'
+import { parseString } from '../lib'
 
 function loadJSON(example: string): string {
   let json = readFileSync(`${__dirname}/../examples/${example}.json`, 'utf8');

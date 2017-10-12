@@ -1,11 +1,11 @@
 import { expect } from 'chai'
 
-import { parseString } from '../grammar'
+import { Predicate, parseString } from '../lib'
 
-function parsePredicate(predicate: string): string {
+function parsePredicate(predicate: string): Predicate {
   const node = `## testNode\n${predicate}`
   const parsed = parseString(node)
-  return parsed.bag.testNode.predicate
+  return parsed!.bag!.testNode.predicate!
 }
 
 describe("predicates", function() {

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { parseString } from '../grammar'
+import { parseString } from '..'
 
 describe("inline bag nodes", () => {
   context("when the inline node has a predicate", () => {

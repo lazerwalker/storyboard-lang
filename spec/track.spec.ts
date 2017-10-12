@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { parseString } from '../grammar'
+import { parseString } from '../lib'
 
 describe("track", () => {
   context("inside a bag node", () => {

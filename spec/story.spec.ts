@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { parseString } from '../grammar'
+import { parseString } from '../lib'
 
 describe("story", () => {
   describe("top-level comments", () => {

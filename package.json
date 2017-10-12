@@ -1,10 +1,10 @@
 {
-  "name": "storyboard-parser",
+  "name": "storyboard-lang",
   "version": "0.0.1",
   "description": "",
-  "main": "grammar.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
-    "chai": "^4.1.0",
     "lodash": "^4.17.4",
     "ohm-js": "https://github.com/harc/ohm.git"
   },
@@ -13,12 +13,15 @@
     "@types/lodash": "^4.14.74",
     "@types/mocha": "^2.2.43",
     "@types/node": "^8.0.28",
+    "chai": "^4.1.0",
     "mocha": "^3.4.2",
     "ts-node": "^3.3.0",
     "typescript": "^2.5.2"
   },
   "scripts": {
-    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register spec"
+    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register spec",
+    "build": "tsc",
+    "prepublish": "npm run build"
   },
   "repository": "git+https://github.com/lazerwalker/storyboard-lang.git",
   "author": "michael@lazerwalker.com",
