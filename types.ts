@@ -25,10 +25,10 @@ export interface Node {
 
 export interface Passage {
   passageId: PassageId;
-  type: string;
-  content: string;
+  type?: string;
+  content?: string;
   predicate?: Predicate,
-  set?: {[key: string]: string}
+  set?: {[key: string]: string|any} // TODO: "any" is used for RNG.
 }
 
 export interface Choice {
@@ -36,5 +36,5 @@ export interface Choice {
   predicate?: Predicate;
 }
 
-export type Predicate = {[key: string]: Predicate|Predicate[]|string|boolean}
+export type Predicate = {[key: string]: Predicate|Predicate[]|string|number|boolean|any} // TODO: 'any' used for RNG
 export type NodeBag = {[key: string]: Node}
