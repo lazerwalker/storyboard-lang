@@ -3,7 +3,7 @@ import * as ohm from 'ohm-js';
 import * as _ from 'lodash';
 import * as Types from './types';
 
-const grammarText = fs.readFileSync('grammar.ohm', 'utf8')
+const grammarText = fs.readFileSync(`${__dirname}/../grammar.ohm`, 'utf8')
 const grammar = ohm.grammar(grammarText)
 
 /**
