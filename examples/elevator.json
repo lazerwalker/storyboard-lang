@@ -58,8 +58,8 @@
           {
             "nodeId": "fourth_floor",
             "predicate": { "and": [
-              { "altitude": { "gte": "11" } },
-              { "altitude": { "lte": "12" } }
+              { "altitude": { "gte": 11 } },
+              { "altitude": { "lte": 12 } }
             ]}
           }
         ]

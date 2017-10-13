@@ -31,7 +31,7 @@ describe("inline bag nodes", () => {
             predicate: { "and": [
               { "graph.currentNodeId": { eq: "testNode" }},
               { and: [
-                { "score": { gt: "5" } },
+                { "score": { gt: 5 } },
                 { "gameIsOver": { eq: true }}
               ]}
             ]},

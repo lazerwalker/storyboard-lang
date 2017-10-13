@@ -6,9 +6,31 @@ import * as Types from './types';
 const grammarText = fs.readFileSync('grammar.ohm', 'utf8')
 const grammar = ohm.grammar(grammarText)
 
-function coerceValue(value: string): any {
+/**
+ * In a few situations, if an author writes e.g. 5 or true, we want to coerce
+ * those to number/boolean instead of string.
+ *
+ * (We need the full Node because we use both the raw sourceString for an ident
+ * and the "parsed" version that has the leading/trailing quotes stripped)
+ */
+function coerceValue(node: ohm.Node): string|number|boolean {
+  if (node.ctorName != "ident") {
+    throw "Called `coerceValue` on something that wasn't a raw identifier"
+  }
+
+  const value = node.asRuntimeJSON
+  const str = node.sourceString
+
+  // If the author explicitly wrapped the value in double-quotes, leave it be
+  if (str[0] == '"' && str[str.length-1] == '"') {
+    return value
+  }
+
   if (value === "true") { return true }
   if (value === "false") { return false }
+
+  if (parseInt(value).toString() === value) { return parseInt(value) }
+
   return value
 }
 
@@ -164,9 +186,9 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => Types.Storyboard
   },
 
   BooleanExp_comparison: (firstObj, comparatorObj, secondObj) => {
-    const first = coerceValue(firstObj.sourceString)
+    const first = firstObj.sourceString
     const comparator = comparatorObj.sourceString
-    const second = coerceValue(secondObj.sourceString)
+    const second = coerceValue(secondObj)
 
     // TODO: This if block is a smell I'm doing something wrong.
     let result: any = {};
@@ -235,7 +257,7 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => Types.Storyboard
   VariableAssignment: (_1, key, _2, value): any => {
     return {
       set: {
-        [key.sourceString]: coerceValue(value.sourceString)
+        [key.sourceString]: coerceValue(value)
       }
     }
   },
@@ -296,8 +318,11 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => Types.Storyboard
     }
   },
 
-  sentence_noQuote: (content): string => content.sourceString,
-  sentence_quote: (lquote, content, rquote): string => {
+  ident_unquoted: (ident): string => ident.sourceString,
+  ident_quoted: (lquote, ident, rquote): string => ident.sourceString,
+
+  sentence_unquoted: (content): string => content.sourceString,
+  sentence_quoted: (lquote, content, rquote): string => {
     let result = content.sourceString
     result = result.replace("\n", "")
     result = result.replace(/\s+/g, " ")

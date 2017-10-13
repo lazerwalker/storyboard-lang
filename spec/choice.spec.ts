@@ -34,12 +34,12 @@ describe("choices", () => {
           nodeId: "destination",
           predicate: { and: [
             { weAreReady: { eq: true } },
-            { timeBeforeLeaving: { eq: "0" } }
+            { timeBeforeLeaving: { eq: 0 } }
           ]}
         },
         {
           nodeId: "prematureDestination",
-          predicate: { timeBeforeLeaving: { eq: "0" } }
+          predicate: { timeBeforeLeaving: { eq: 0 } }
         },
       ])
     })

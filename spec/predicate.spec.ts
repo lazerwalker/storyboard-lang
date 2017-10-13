@@ -23,7 +23,7 @@ describe("predicates", function() {
         const exp = "[ foo == 5 ]"
         const parsed = parsePredicate(exp)
         expect(parsed).to.eql({
-          foo: { eq: "5" }
+          foo: { eq: 5 }
         })
       })
 
@@ -32,7 +32,7 @@ describe("predicates", function() {
         const exp = "[ foo != 5 ]"
         const parsed = parsePredicate(exp)
         expect(parsed).to.eql({
-          foo: { neq: "5" }
+          foo: { neq: 5 }
         })
       })
 
@@ -40,7 +40,7 @@ describe("predicates", function() {
         const exp = "[ foo isnt 5 ]"
         const parsed = parsePredicate(exp)
         expect(parsed).to.eql({
-          foo: { neq: "5" }
+          foo: { neq: 5 }
         })
       })
 
@@ -48,7 +48,7 @@ describe("predicates", function() {
         const exp = "[ foo = 5 ]"
         const parsed = parsePredicate(exp)
         expect(parsed).to.eql({
-          foo: { eq: "5" }
+          foo: { eq: 5 }
         })
       })
 
@@ -56,7 +56,7 @@ describe("predicates", function() {
         const exp = "[ foo is 5 ]"
         const parsed = parsePredicate(exp)
         expect(parsed).to.eql({
-          foo: { eq: "5" }
+          foo: { eq: 5 }
         })
       })
 
@@ -64,7 +64,7 @@ describe("predicates", function() {
         const exp = "[ foo <= 5 ]"
         const parsed = parsePredicate(exp)
         expect(parsed).to.eql({
-          foo: { lte: "5" }
+          foo: { lte: 5 }
         })
       })
 
@@ -80,7 +80,7 @@ describe("predicates", function() {
         const exp = "[ foo < 5 ]"
         const parsed = parsePredicate(exp)
         expect(parsed).to.eql({
-          foo: { lt: "5" }
+          foo: { lt: 5 }
         })
       })
 
@@ -88,7 +88,7 @@ describe("predicates", function() {
         const exp = "[ foo > 10 ]"
         const parsed = parsePredicate(exp)
         expect(parsed).to.eql({
-          foo: { gt: "10" }
+          foo: { gt: 10 }
         })
       })
 
@@ -249,7 +249,7 @@ describe("predicates", function() {
       expect(parsed).to.eql({
         or: [
           {foo: { eq: true }},
-          {bar: { lt: "10"}}
+          {bar: { lt: 10}}
         ]
       })
 
@@ -262,6 +262,40 @@ describe("predicates", function() {
             {bar: { exists: true}}
           ]
         })
+      })
+    })
+  })
+
+  describe("type coersion", () => {
+    it("should parse unquoted numbers as numbers", () => {
+      const exp = "[ foo == 5 ]"
+      const parsed = parsePredicate(exp)
+      expect(parsed).to.eql({
+        foo: { eq: 5 }
+      })
+    })
+
+    it("should parse quoted numbers as strings", () => {
+      const exp = '[ foo == "5" ]'
+      const parsed = parsePredicate(exp)
+      expect(parsed).to.eql({
+        foo: { eq: "5" }
+      })
+    })
+
+    it("should parse unquoted booleans as booleans", () => {
+      const exp = "[ foo == true ]"
+      const parsed = parsePredicate(exp)
+      expect(parsed).to.eql({
+        foo: { eq: true }
+      })
+    })
+
+    it("should parse quoted booleans as strings", () => {
+      const exp = '[ foo == "false" ]'
+      const parsed = parsePredicate(exp)
+      expect(parsed).to.eql({
+        foo: { eq: "false" }
       })
     })
   })

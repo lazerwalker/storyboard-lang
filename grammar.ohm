@@ -59,11 +59,12 @@ content
 // TODO: steal judiciously from the ES5 example
 
 ident  (an identifier)
-  = symbol*
+ = "\"" symbol* "\"" -- quoted
+ | symbol* -- unquoted
 
 sentence
-  = "\"" doubleQuoteSymbol* "\"" -- quote
-  | unquotedTextSymbol* -- noQuote
+  = "\"" doubleQuoteSymbol* "\"" -- quoted
+  | unquotedTextSymbol* -- unquoted
 
 doubleQuoteSymbol
   = unquotedTextSymbol | "\n"

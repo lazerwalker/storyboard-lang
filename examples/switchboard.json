@@ -53,7 +53,7 @@
               { "Mabel.cable": { "exists": true } },
               { "and": [
                 { "Mabel.isFront": { "eq": false } },
-                { "Mabel.switch": { "eq": "-1" } }
+                { "Mabel.switch": { "eq": -1 } }
               ]}
             ]}
         }]
@@ -111,7 +111,7 @@
                   { "Dolores.cable": { "eq": "Mabel.cable" } },
                   { "and": [
                     { "Dolores.isFront": { "eq": true } },
-                    { "Dolores.switch": {"eq": "1" } }
+                    { "Dolores.switch": {"eq": 1 } }
                   ]}
                 ]}
               ]}
