@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { parseString } from '..'
+import { parseString } from '../lib'
 
 describe("inline bag nodes", () => {
   context("when the inline node has a predicate", () => {
