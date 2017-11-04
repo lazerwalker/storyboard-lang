@@ -1,17 +1,39 @@
 # Storyboard-lang
-[Storyboard](https://github.com/lazerwalker/storyboard) (name to be changed :P) is an experimental interactive fiction engine designed to enable narrative experiences in AR and other digital/physical hybrid environments.
+[Storyboard](https://github.com/lazerwalker/storyboard) (name liable to change) is an experimental interactive fiction engine designed to enable narrative experiences in AR and other digital/physical hybrid environments.
 
-This is an experimental stab at creating a scripting language for Storyboard. It's designed to look similar to [Ink](https://github.com/inkle/ink), although there are a lot of differences based on how different the underlying engine's narrative model is.
+This is a scripting language for Storyboard. It's designed to look similar to [Ink](https://github.com/inkle/ink), although there are a lot of differences based on how different the underlying engine's narrative model is.
 
-It's written in [Ohm](https://github.com/harc/ohm), a great tool to create programming languages and DSLs in JavaScript. This tool converts from storyboard-lang syntax into the JSON object format that the storyboard engine reads.
+Storyboard-lang is written in [Ohm](https://github.com/harc/ohm). This tool converts from storyboard-lang syntax into the JSON object format that the Storyboard engine reads.
 
+The main Storyboard engine includes this project as a dependency. Unless you're hoping to actively hack on the compiler, you probably care about the main [Storyboard](https://github.com/lazerwalker/storyboard) repo rather than this one.
+
+## Language Reference
+
+Erm, this is coming soon! The project is rather immature, so this may wait until the language itself is a bit less in flux. 
+
+The `examples` folder contains a few example `.story` files, as well as the corresponding JSON they are expected to compile down to. There are automated tests confirming their correctness, so even though things are fairly in-flux, the examples shouldn't be outdated as long as the test suite is passing.
+
+## Setup
+
+This project is not yet published on `npm`, but it will be once things stabilize a bit.
+
+For now:
+
+1. Clone this repo
+2. Fetch dependencies: `yarn install`
+3. Build the library: `npm run build`
+
+`dist/index.js` will contain a library suitable for importing into your own Node project. The `dist` folder will contain TypeScript definition files as well.
+
+The compiler currently loads the `grammar.ohm` file in the project directory at runtime. This means you must have the entire directory structure available (I typically use `yarn link` locally), and that it thus doesn't yet run in any environment other than Node (e.g. the browser). This will change!
 
 ## Usage
-This project is very much a work-in-progress and isn't really yet ready for anyone else to use.
 
-If you're particularly eager: `index.js` usually has some form of code that loads up a `.story` file and parses it. `examples/` are full of some examples that may or may not work, and `spec/` has some unit tests that may also reveal something about expected behavior.
+This module exports a single `parseString()` function, which takes in a string of Ohm code and returns a JSON `Story` object (essentially an AST in a JSON format that the Storyboard runtime engine can understand). It also exports a bunch of TypeScript types, which are consumed by the Storyboard engine.
 
-`grammar.ohm` contains the grammar, and `grammar.js` contains the Ohm semantics that transform the AST into Storyboard-compatible JSON.
+For those interested in the actual code: `grammar.ohm` contains the grammar, and `grammar.ts` contains the Ohm semantics that transform the AST into Storyboard-compatible JSON.
+
+The `spec` folder also contains pretty detailed BDD-style tests, which may serve as a useful guide to intended functionality.
 
 ## License
 This project is licensed under the MIT license. See the LICENSE file for more info.
