@@ -27,9 +27,7 @@ For now:
 2. Fetch dependencies: `yarn install`
 3. Build the library: `npm run build`
 
-`dist/index.js` will contain a library suitable for importing into your own Node project. The `dist` folder will contain TypeScript definition files as well.
-
-The compiler currently loads the `grammar.ohm` file in the project directory at runtime. This means you must have the entire directory structure available (I typically use `yarn link` locally), and that it thus doesn't yet run in any environment other than Node (e.g. the browser). This will change!
+`dist/bundle.js` will contain a library suitable for importing into your own Node project. The `dist/dist` folder will contain TypeScript definition files as well.
 
 ## Usage
 
