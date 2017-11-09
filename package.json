@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A scripting language for an experimental interactive fiction engine",
   "main": "dist/bundle.js",
-  "types": "dist/dist/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "dependencies": {
     "lodash": "^4.17.4",
     "ohm-js": "https://github.com/harc/ohm.git"

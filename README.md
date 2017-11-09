@@ -27,7 +27,7 @@ For now:
 2. Fetch dependencies: `yarn install`
 3. Build the library: `npm run build`
 
-`dist/bundle.js` will contain a library suitable for importing into your own Node project. The `dist/dist` folder will contain TypeScript definition files as well.
+`dist/bundle.js` will contain a library suitable for importing into your own Node project. The `dist/types` folder will contain TypeScript definition files as well.
 
 ## Usage
 
