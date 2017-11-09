@@ -25,7 +25,7 @@
   },
   "scripts": {
     "test": "mocha-webpack spec",
-    "build": "tsc",
+    "build": "webpack",
     "prepublish": "npm run build"
   },
   "repository": "git+https://github.com/lazerwalker/storyboard-lang.git",
