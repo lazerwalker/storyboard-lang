@@ -1,15 +1,14 @@
 import { expect } from 'chai';
-import { readFileSync } from 'fs';
 
 import { parseString } from '../lib'
 
-function loadJSON(example: string): string {
-  let json = readFileSync(`${__dirname}/../examples/${example}.json`, 'utf8');
-  return JSON.parse(json)
+
+function loadJSON(example: string): object {
+  return require(`${__dirname}/../examples/${example}.json`);
 }
 
 function loadAndParseStory(example: string): any {
-  const story = readFileSync(`${__dirname}/../examples/${example}.story`, 'utf8');
+  const story = require(`${__dirname}/../examples/${example}.story`);
   return parseString(story);
 }
 

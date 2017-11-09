@@ -24,7 +24,7 @@
     "webpack-dev-server": "^2.9.4"
   },
   "scripts": {
-    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register spec",
+    "test": "mocha-webpack spec",
     "build": "tsc",
     "prepublish": "npm run build"
   },

@@ -3,7 +3,9 @@ import * as ohm from 'ohm-js';
 import * as _ from 'lodash';
 import * as Types from './types';
 
-const grammarText = fs.readFileSync(`${__dirname}/../grammar.ohm`, 'utf8')
+// TODO: ES6 import syntax is giving weird TypeScript errors
+// (at runtime, `typeof grammarText === string`, but at compile time it doesn't know what to do)
+const grammarText = require('./grammar.ohm');
 const grammar = ohm.grammar(grammarText)
 
 /**
