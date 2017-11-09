@@ -33,7 +33,7 @@ For now:
 
 This module exports a single `parseString()` function, which takes in a string of Ohm code and returns a JSON `Story` object (essentially an AST in a JSON format that the Storyboard runtime engine can understand). It also exports a bunch of TypeScript types, which are consumed by the Storyboard engine.
 
-For those interested in the actual code: `grammar.ohm` contains the grammar, and `grammar.ts` contains the Ohm semantics that transform the AST into Storyboard-compatible JSON.
+For those interested in the actual code: `grammar.ohm` contains the grammar, and `index.ts` contains the Ohm semantics that transform the AST into Storyboard-compatible JSON.
 
 The `spec` folder also contains pretty detailed BDD-style tests, which may serve as a useful guide to intended functionality.
 
