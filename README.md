@@ -1,4 +1,8 @@
 # Storyboard-lang
+
+[![CI Status](http://img.shields.io/travis/lazerwalker/storyboard-lang.svg?style=flat)](https://travis-ci.org/lazerwalker/storyboard-lang)
+
+
 [Storyboard](https://github.com/lazerwalker/storyboard) (name liable to change) is an experimental interactive fiction engine designed to enable narrative experiences in AR and other digital/physical hybrid environments.
 
 This is a scripting language for Storyboard. It's designed to look similar to [Ink](https://github.com/inkle/ink), although there are a lot of differences based on how different the underlying engine's narrative model is.
@@ -9,7 +13,7 @@ The main Storyboard engine includes this project as a dependency. Unless you're 
 
 ## Language Reference
 
-Erm, this is coming soon! The project is rather immature, so this may wait until the language itself is a bit less in flux. 
+Erm, this is coming soon! The project is rather immature, so this may wait until the language itself is a bit less in flux.
 
 The `examples` folder contains a few example `.story` files, as well as the corresponding JSON they are expected to compile down to. There are automated tests confirming their correctness, so even though things are fairly in-flux, the examples shouldn't be outdated as long as the test suite is passing.
 
