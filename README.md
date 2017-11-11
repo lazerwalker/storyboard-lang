@@ -31,7 +31,7 @@ yarn add storyboard-lang
 
 1. Clone this repo
 2. Fetch dependencies: `yarn install`
-3. Build the library: `npm run build`
+3. Build the library: `yarn run build`
 
 `dist/bundle.js` will contain a library suitable for importing into your own Node project. The `dist/types` folder will contain TypeScript definition files as well.
 
