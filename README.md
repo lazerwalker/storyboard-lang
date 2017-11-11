@@ -19,9 +19,15 @@ The `examples` folder contains a few example `.story` files, as well as the corr
 
 ## Setup
 
-This project is not yet published on `npm`, but it will be once things stabilize a bit.
+Unless you're planning on making changes to this codebase, you probably actually want to install the main storyboard runtime engine (https://github.com/lazerwalker/storyboard), which includes this as a dependency.
 
-For now:
+That said, you can install this via npm or yarn:
+```sh
+npm install storyboard-lang
+yarn add storyboard-lang
+```
+
+## Dev Setup
 
 1. Clone this repo
 2. Fetch dependencies: `yarn install`
