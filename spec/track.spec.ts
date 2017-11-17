@@ -12,19 +12,17 @@ describe("track", () => {
         output: baz
       `
 
-      expect(parseString(input)).to.eql({
-        bag: {
-          testNode: {
-            nodeId: "testNode",
-            track: "bar",
-            choices: [],
-            predicate: { foo: { eq: true }},
-            passages: [{
-              passageId: "0",
-              type: "output",
-              content: "baz"
-            }]
-          }
+      expect(parseString(input)!.bag).to.eql({
+        testNode: {
+          nodeId: "testNode",
+          track: "bar",
+          choices: [],
+          predicate: { foo: { eq: true }},
+          passages: [{
+            passageId: "0",
+            type: "output",
+            content: "baz"
+          }]
         }
       })
     })

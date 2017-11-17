@@ -104,12 +104,9 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => Types.Storyboard
     let result: any = {
       nodeId: title.asRuntimeJSON,
       passages: passages.map( (p) => p.asRuntimeJSON ),
-      choices: choices.map( (c) => c.asRuntimeJSON )
+      choices: choices.map( (c) => c.asRuntimeJSON ),
+      predicate: predicate.asRuntimeJSON
     };
-
-    if (predicate.children.length > 0) {
-      result.predicate = predicate.children[0].asRuntimeJSON;
-    }
 
     if (track.length === 1) {
       result.track = track[0].asRuntimeJSON
@@ -335,11 +332,8 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => Types.Storyboard
 
   Comment: (_1, _2) => undefined,
 
-  BagTitle_noEnd: (_, title): string => title.sourceString,
-  BagTitle_end: (_1, title, _2): string => title.sourceString,
-
-  GraphTitle_noEnd: (_, title): string => title.sourceString,
-  GraphTitle_end: (_1, title, _2): string => title.sourceString,
+  Title_noEnd: (_, title): string => title.sourceString,
+  Title_end: (_1, title, _2): string => title.sourceString,
 }
 
 export function parseString(text: string): Types.Story|undefined {

@@ -4,16 +4,12 @@ Story = Comment? Start? (Comment|BagNode|GraphNode)+
 
 Start = "start: " ident
 
-BagNode = BagTitle Predicate? (track|Passage|Choice|specialInstruction|Comment)*
-GraphNode = GraphTitle (Passage|Choice|specialInstruction|Comment)*
+BagNode = Title Predicate (track|Passage|Choice|specialInstruction|Comment)*
+GraphNode = Title (Passage|Choice|specialInstruction|Comment)*
 
-BagTitle
-  = "##" ident "##" -- end
-  | "##" ident -- noEnd
-
-GraphTitle
-  = "#" ident "#" -- end
-  | "#" ident -- noEnd
+Title
+  = header ident -- noEnd
+  | header ident header -- end
 
 Predicate
   = "[" PredicateExp "]"
@@ -75,6 +71,8 @@ unquotedTextSymbol
 symbol
   = alnum | "_" | "." | "!" | "," | "'" | "{" | "}" | "?" | "-"
 
+header
+  = "#" | "##"
 
 comparator
   = "=="

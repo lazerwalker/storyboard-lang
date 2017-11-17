@@ -32,5 +32,6 @@ start: check_location
     speech: "I didn't tell you to go back down!"
 
 ## bg_music ##
+    [ graph.currentNodeId is check_location ]
     track: background
     mp3: SoWhat
