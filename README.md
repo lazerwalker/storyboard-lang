@@ -1,6 +1,6 @@
 # Storyboard-lang
 
-[![CI Status](http://img.shields.io/travis/lazerwalker/storyboard-lang.svg?style=flat)](https://travis-ci.org/lazerwalker/storyboard-lang)
+[![CI Status](http://img.shields.io/travis/lazerwalker/storyboard-lang.svg?style=flat&branch=master)](https://travis-ci.org/lazerwalker/storyboard-lang)
 
 
 [Storyboard](https://github.com/lazerwalker/storyboard) (name liable to change) is an experimental interactive fiction engine designed to enable narrative experiences in AR and other digital/physical hybrid environments.
