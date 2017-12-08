@@ -73,7 +73,7 @@ unquotedTextSymbol
   = symbol | " "
 
 symbol
-  = alnum | "_" | "." | "!" | "," | "'" | "{" | "}" | "?" | "-" | ";"
+  = alnum | "_" | "." | "!" | "," | "’" | "'" | "{" | "}" | "?" | "-" | ";"
 
 
 comparator
