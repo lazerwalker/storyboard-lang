@@ -39,7 +39,7 @@ Passage
   | Predicate VariableAssignment -- variableWithPredicate
 
 VariableAssignment
-  = "set" ident ("="|"to") ident
+  = "set" ident ("="|"to") sentence
 
 Choice
   = "->" ident ": " Predicate -- predicate
