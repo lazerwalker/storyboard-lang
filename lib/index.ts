@@ -18,7 +18,7 @@ const grammar = ohm.grammar(grammarText)
  * and the "parsed" version that has the leading/trailing quotes stripped)
  */
 function coerceValue(node: ohm.Node): string|number|boolean {
-  if (node.ctorName != "ident") {
+  if (node.ctorName !== "ident" && node.ctorName !== "sentence") {
     throw "Called `coerceValue` on something that wasn't a raw identifier"
   }
 
