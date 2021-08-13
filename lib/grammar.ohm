@@ -39,7 +39,8 @@ Passage
   | Predicate VariableAssignment -- variableWithPredicate
 
 VariableAssignment
-  = "set" ident ("="|"to") sentence
+  = "set" ident ("="|"to") sentence -- set
+  | "unset" ident -- unset
 
 Choice
   = "->" ident ": " Predicate -- predicate
@@ -59,7 +60,7 @@ content
 // TODO: steal judiciously from the ES5 example
 
 ident  (an identifier)
- = "\"" symbol* "\"" -- quoted
+ = "\"" spaceSymbol* "\"" -- quoted
  | symbol* -- unquoted
 
 sentence
@@ -72,8 +73,11 @@ doubleQuoteSymbol
 unquotedTextSymbol
   = symbol | " "
 
+spaceSymbol 
+  = symbol | " "
+
 symbol
-  = alnum | "_" | "." | "!" | "," | "’" | "'" | "{" | "}" | "?" | "-" | ";" | "(" | ")"
+  = alnum | "_" | "." | "!" | "," | "’" | "'" | "{" | "}" | "?" | "-" | ";" | "(" | ")" | "<" | ">" 
 
 comparator
   = "=="

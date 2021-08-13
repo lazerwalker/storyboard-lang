@@ -258,10 +258,20 @@ const asRuntimeJSON: {[name: string]: (...nodes: ohm.Node[]) => Types.Storyboard
     return result
   },
 
-  VariableAssignment: (_1, key, _2, value): any => {
+  VariableAssignment_set: (_1, key, _2, value): any => {
     return {
       set: {
         [key.sourceString]: coerceValue(value)
+      }
+    }
+  },
+
+  VariableAssignment_unset: (_1, key): any => {
+    // TODO: setting something to undefined !== deleting it.
+    // Eventually make this a proper action that results in delete being called
+    return {
+      set: {
+        [key.sourceString]: undefined
       }
     }
   },
